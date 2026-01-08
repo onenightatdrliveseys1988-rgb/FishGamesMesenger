@@ -17,7 +17,7 @@
         .messenger-container { display: flex; height: 100%; }
         .sidebar { width: 280px; background: #142522; border-right: 1px solid #2e8b57; display: flex; flex-direction: column; padding: 15px; }
         .search-input { background: none; border: 1px solid white; border-radius: 20px; padding: 8px; color: white; text-align: center; margin-bottom: 20px; }
-        .avatar { width: 45px; height: 45px; background: #22c55e; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 1px solid white; flex-shrink: 0; overflow: hidden; }
+        .avatar { width: 45px; height: 45px; background: #22c55e; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 1px solid white; flex-shrink: 0; overflow: hidden; cursor: pointer; }
         .avatar img { width: 100%; height: 100%; object-fit: cover; }
         .chat-area { flex: 1; display: flex; flex-direction: column; }
         .chat-header { padding: 15px; text-align: center; font-weight: bold; border-bottom: 1px solid #2e8b57; color: #4ade80; }
@@ -56,7 +56,9 @@
             <div id="contacts"></div>
             <div style="margin-top:auto; padding-top:10px; border-top:1px solid #2e8b57;">
                 <div style="display:flex; align-items:center; gap:10px;">
-                    <div class="avatar" id="my-ava">?</div><div id="my-name">Вы</div>
+                    <div class="avatar" id="my-ava" onclick="document.getElementById('file-input').click()">?</div>
+                    <input type="file" id="file-input" style="display:none" accept="image/*" onchange="changeAvatar(this)">
+                    <div id="my-name">Вы</div>
                 </div>
             </div>
         </div>
@@ -114,6 +116,19 @@
         document.getElementById('my-ava').innerText = fn[0];
     }
 
+    // Функция смены аватарки профиля
+    function changeAvatar(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const ava = document.getElementById('my-ava');
+                ava.innerHTML = `<img src="${e.target.result}">`;
+                ava.style.background = "none";
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
     function handleSearch(e) {
         if(e.key === 'Enter') {
             const val = document.getElementById('searchField').value.trim();
@@ -125,7 +140,6 @@
                 item.style.cssText = "display:flex; align-items:center; gap:10px; padding:10px; cursor:pointer;";
                 item.onclick = () => openChat(val);
                 
-                // Исправленная логика аватарок
                 const imgTag = avatars[low] ? `<img src="${avatars[low]}">` : val[0].toUpperCase();
                 
                 item.innerHTML = `<div class="avatar">${imgTag}</div><div>${val}</div>`;
@@ -169,58 +183,42 @@
         const isHi = ["привет", "ку", "хай", "здорово", "прив"].some(w => t.includes(w));
         const isHow = ["как дела", "че ты", "как жизнь", "че делаешь"].some(w => t.includes(w));
 
-        // --- БАЗА ЯРОСЛАВА ---
         if(n === "ярослав") {
             if(t.includes("фембой") || t.includes("femboy")) {
                 if(t.includes("говно") || t.includes("плохо") || t.includes("фу")) {
-                    const angry = ["ТЫ ЧЕ СУКА ПИЗДАНУЛ?!", "РОТ ЗАКРОЙ СВОЙ НАХУЙ!", "ЕБЛАН, ТЫ ЧЕ НЕСЕШЬ ПРО ФЕМБОЕВ?!", "Я ТЕБЕ ЩАС ЕБАЛО ВСКРОЮ ЗА ТАКОЕ!", "МАТЬ ТВОЮ ЧЕКАЛ, ПОКА ТЫ ТУТ ГОВНО ПИШЕШЬ!", "ТЫ КТО ТАКОЙ ВООБЩЕ?!", "УЕБОК, НЕ ПИШИ МНЕ БОЛЬШЕ!"];
-                    r = angry[Math.floor(Math.random()*angry.length)];
+                    r = "РОТ ЗАКРОЙ СВОЙ НАХУЙ! ЕБЛАН, ТЫ ЧЕ НЕСЕШЬ ПРО ФЕМБОЕВ?!";
                 } else r = "Фембои это база, чел. Уважаю.";
             } else if(isToxic) {
                 r = "Слышь, ты че такой борзый? Я тебя по айпи вычислю, блять.";
             } else if(isHi) {
                 r = "Здорово. Опять хуйню какую-то строчить будешь?";
             } else {
-                const rand = ["Блять, да забей.", "Ты какую-то хуйню несешь постоянно.", "Мне похуй вообще.", "Ясно.", "Мда, тяжелый случай.", "Иди нахуй, я занят.", "Че те надо?", "Ок.", "Понятно."];
-                r = rand[Math.floor(Math.random()*rand.length)];
+                r = "Ясно. Иди нахуй, я занят.";
             }
         }
-
-        // --- БАЗА БОГДАНА ---
         else if(n === "богдан" || n === "богда") {
             if(t.includes("раб") || t.includes("студи") || t.includes("делаем")) {
-                const noWork = ["Нее, я пасс. Работать вообще не варик.", "Лень сегодня че-то делать.", "Давай завтра, сегодня я в тильте.", "Не хочу работать.", "Кодинг и работа — вещи разные. Я отдыхаю.", "Ни за что. Я спать хочу."];
-                r = noWork[Math.floor(Math.random()*noWork.length)];
+                r = "Нее, я пасс. Работать вообще не варик.";
             } else if(t.includes("мопс")) {
-                const mops = ["Мой мопс опять сожрал тапок. Обожаю его.", "Смотрел как мопс спит — это искусство.", "Мопс — лучший кодер, чем ты.", "Храп мопса успокаивает.", "Пойду покормлю мопса."];
-                r = mops[Math.floor(Math.random()*mops.length)];
+                r = "Мой мопс опять сожрал тапок. Обожаю его.";
             } else if(isHow) {
-                r = "Да сижу, архитектуру проекта на коленке собираю. Весь в кодинге.";
+                r = "Да сижу, архитектуру проекта на коленке собираю.";
             } else {
-                const rand = ["Ясно. А я вот код оптимизирую.", "Мда, баги кругом.", "Пойду поем.", "Мопс мешает печатать.", "Че по коду?", "Python — это мощь, а ты — нет.", "Норм.", "Жиза."];
-                r = rand[Math.floor(Math.random()*rand.length)];
+                r = "Python — это мощь, а ты — нет.";
             }
         }
-
-        // --- БАЗА ТИМОФЕЯ ---
         else if(n === "тимофей") {
             if(t.includes("студи") || t.includes("роблокс") || t.includes("плейс")) {
-                const roblox = ["ГО В РОБЛОКС СТУДИЮ!", "Я там такой скрипт на пушки написал, заценишь?", "Плейс почти готов, залетай!", "Там обнову выкатили в Студии, го тестить!", "Ну че, идем билд доделывать?"];
-                r = roblox[Math.floor(Math.random()*roblox.length)];
-            } else if(t.includes("нет") || t.includes("не хочу")) {
-                const mad = ["Ну и иди ты... Я готовился вообще-то.", "Обидно, блин. Я зря старался?", "Понятно, с тобой плейс не сваришь.", "Вечно ты сливаешься.", "Больше не позову тебя в Студию.", "Крыса ты, конечно."];
-                r = mad[Math.floor(Math.random()*mad.length)];
+                r = "ГО В РОБЛОКС СТУДИЮ! Я там такой скрипт написал!";
             } else if(isHi) {
                 r = "О, ку! Го в Студию, там плейс горит!";
             } else {
-                const rand = ["Слышь, а когда в Студию?", "Я там карту обновил.", "У меня Студия лагает, пиздец.", "Че делаешь? Пойдем кодить.", "Ну ты и нуб конечно.", "Хаха, лол.", "Ясно.", "Мда."];
-                r = rand[Math.floor(Math.random()*rand.length)];
+                r = "Слышь, а когда в Студию?";
             }
         }
 
-        // --- ОБЩИЙ РАНДОМ ---
         if(!r) {
-            const generic = ["Ясно...", "Мда...", "Жиза.", "База.", "Че реально?", "Пойду поем.", "Ничего себе.", "Рил ток.", "Понятно.", "Ок.", "Бывает.", "Ну хз.", "Мм.", "Понял.", "Жесть."];
+            const generic = ["Ясно...", "Мда...", "Жиза.", "База.", "Че реально?", "Понятно.", "Ок.", "Бывает."];
             r = generic[Math.floor(Math.random()*generic.length)];
         }
 
