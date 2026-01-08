@@ -124,10 +124,14 @@
                 const item = document.createElement('div');
                 item.style.cssText = "display:flex; align-items:center; gap:10px; padding:10px; cursor:pointer;";
                 item.onclick = () => openChat(val);
-                const img = avatars[low] ? `<img src="${avatars[low]}">` : val[0].toUpperCase();
-                item.innerHTML = `<div class="avatar">${img}</div><div>${val}</div>`;
+                
+                // Исправленная логика аватарок
+                const imgTag = avatars[low] ? `<img src="${avatars[low]}">` : val[0].toUpperCase();
+                
+                item.innerHTML = `<div class="avatar">${imgTag}</div><div>${val}</div>`;
                 document.getElementById('contacts').appendChild(item);
                 openChat(val);
+                document.getElementById('searchField').value = '';
             }
         }
     }
